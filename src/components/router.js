@@ -56,18 +56,18 @@ class Routing extends React.PureComponent {
         <Route
           {...rest}
           component={Home}
-        // render={({ location }) =>
-        //   UserState.user._id ? 
-        //       children
-        //  : (
-        //     <Redirect
-        //       to={{
-        //         pathname: "/login",
-        //         state: { from: location }
-        //       }}
-        //     />
-        //   )
-        // }
+         render={({ location }) =>
+           UserState.user._id ? 
+               children
+          : (
+             <Redirect
+               to={{
+                 pathname: "/login",
+                 state: { from: location }
+               }}
+             />
+           )
+         }
         />
       );
     }
@@ -94,26 +94,26 @@ class Routing extends React.PureComponent {
               <Route exact path="/" component={Signup} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/forgetpassword" component={ForgetPassword} />
-              {/* <Route exact path="/resetpassword" component={ResetPassword} /> */}
-              {/* <PrivateRoute path="/home">
+              {/* <Route exact path="/resetpassword" component={ResetPassword} /> 
+               <PrivateRoute path="/home">
                 <Home/>
-              </PrivateRoute> */}
-              <Route path="/home" render={() => <Home />} />
-              {/* <Route path="/home" render={() => UserState.user._id ? (UserState.user.isVerified ? (<Home />) :
+              </PrivateRoute>  */}
+              {/* <Route path="/home" render={() => <Home />} /> */}
+              <Route path="/home" render={() => UserState.user._id ? (UserState.user.isVerified ? (<Home />) :
                 (<Redirect to={{
                   pathname: "/verifymail",
-                  // state: { from: location }
+                   state: { from: location }
                 }} />)
               )
                 : (
                   <Redirect
                     to={{
                       pathname: "/login",
-                      // state: { from: location }
+                      state: { from: location }
                     }}
                   />
                 )
-              } /> */}
+              } />
               <Route exact path="/verifymail" component={RegistrationSuccessfully} />
               <Route exact path="/resetpassword" component={PasswordRestVerification} />
 

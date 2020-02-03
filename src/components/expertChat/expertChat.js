@@ -1,5 +1,15 @@
 import React, { useState, useEffect, Component } from "react";
-import { Row, Col, Collapse, Layout, Icon, message } from "antd";
+import {
+  Row,
+  Col,
+  Collapse,
+  Layout,
+  Icon,
+  message,
+  Dropdown,
+  Menu,
+  Button
+} from "antd";
 import "./chat.css";
 import "./bubble.css";
 import ChatBox from "./chatBox";
@@ -14,7 +24,7 @@ import { connect } from "react-redux";
 const { Panel } = Collapse;
 
 const { Header, Content, Footer } = Layout;
-const TIME_INCREMENT = 200;
+const TIME_INCREMENT = 2000;
 
 class ExpertChat extends Component {
   constructor(props) {
@@ -24,13 +34,14 @@ class ExpertChat extends Component {
     this.setChat = this.setChat.bind(this);
     this.clearResponse = this.clearResponse.bind(this);
     this.getResponse = this.getResponse.bind(this);
+    this.handleMenuClick = this.handleMenuClick.bind(this);
   }
   // const [state, setState] = useState();
   // const [isLoading, setLoading] = useState(true);
   state = {
     isLoading: true,
-    chats: [],
-    possibleResponse: []
+    possibleResponse: [],
+    chats: []
   };
   scrollToBottom = () => {
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
@@ -41,10 +52,10 @@ class ExpertChat extends Component {
     this.setState({ isLoading });
   };
   setResponse = possibleResponse => {
-    console.log("to set possibl3 response: ", possibleResponse);
     if (!possibleResponse) return;
     this.setState({ possibleResponse });
   };
+  handleMenuClick = () => {};
   clearResponse = _ => {
     this.setState({ possibleResponse: [] });
   };
@@ -55,7 +66,7 @@ class ExpertChat extends Component {
   };
   componentDidMount() {
     const { dispatch } = this.props;
-    const { chats } = this.state;
+    const { chats, possibleResponse } = this.state;
     const { setChat, setLoading, setResponse } = this;
     (async () => {
       const token = localStorage.getItem("tokenas");
@@ -70,7 +81,7 @@ class ExpertChat extends Component {
             let waitTime = 0;
             this.getResponse(chat);
           }
-          console.log(res, err);
+          // console.log(res, err);
         }
       );
       setLoading(false);
@@ -79,6 +90,7 @@ class ExpertChat extends Component {
   render() {
     const { dispatch } = this.props;
     const { isLoading, chats } = this.state;
+    const setResponse = this.setResponse;
 
     return (
       <>
@@ -136,17 +148,26 @@ class ExpertChat extends Component {
                   transform: "translateZ(0)"
                 }}
               >
-                {chats.map(({ status, message, time, _id }, i) => {
-                  return (
-                    <Chatbubble
-                      key={i}
-                      time={time}
-                      message={status == "message"}
-                    >
-                      {message}
-                    </Chatbubble>
-                  );
-                })}
+                {/* <Chatbubble
+                id={'5e38721537d6f42b21e5f7f7'}
+                 /> */}
+                {chats.map(
+                  (
+                    { status, message, time, possibleResponse, dropdown },
+                    i
+                  ) => {
+                    return (
+                      <Chatbubble
+                        key={i}
+                        message={status == "message"}
+                        setResponse={this.setResponse}
+                        {...{ possibleResponse, time, dropdown }}
+                      >
+                        {message}
+                      </Chatbubble>
+                    );
+                  }
+                )}
                 <div
                   ref={el => {
                     this.messagesEnd = el;
@@ -172,61 +193,141 @@ class ExpertChat extends Component {
                   {/* <Icon type="arrow-right" /> */}
                   <img className="img" src={rightIcon} />
                 </span>
-                {this.state.possibleResponse.map(({ _id, response }) => {
-                  return (
-                    <div
-                      key={_id}
-                      style={{
-                        background: "#FB9500",
-                        padding: "5px 10px",
-                        borderRadius: "5px",
-                        fontSize: "18px",
-                        color: "white",
-                        fontWeight: "bold",
-                        margin: "0px 5px",
-                        cursor: "pointer",
-                        minWidth: "100px"
-                      }}
-                      onClick={async () => {
-                        const { setChat, setLoading, setResponse } = this;
-                        let newChat = [
-                          ...this.state.chats,
-                          {
-                            message: response,
-                            time: Date.now(),
-                            status: "response"
-                            // ...chat
-                          }
-                        ];
-
-                        this.setChat(newChat);
-                        await this.scrollToBottom();
-                        this.clearResponse();
-                        this.setLoading(true);
-                        const token = localStorage.getItem("tokenas");
-                        this.scrollToBottom();
-
-                        await api.post(
-                          "/api/expertChat/getResponse",
-                          { _id },
-                          token,
-                          dispatch,
-                          (err, res) => {
-                            if (!err) {
-                              const chat = res;
-                              let waitTime = 0;
-                              this.scrollToBottom();
-                              this.getResponse(chat);
+                {this.state.possibleResponse.map(
+                  ({ _id, response, dropdown }) => {
+                    if (dropdown) {
+                      const menu = (
+                        <Menu
+                          onClick={async ({
+                            item: {
+                              props: { children }
                             }
-                            console.log(res, err);
-                          }
-                        );
-                      }}
-                    >
-                      {response}
-                    </div>
-                  );
-                })}
+                          }) => {
+                            const { setChat, setLoading, setResponse } = this;
+                            let newChat = [
+                              ...this.state.chats,
+                              {
+                                message: children,
+                                time: new Date().toJSON(),
+                                status: "response",
+                                // ...chat,
+                                possibleResponse: this.state.possibleResponse
+                              }
+                            ];
+
+                            this.setChat(newChat);
+                            await this.scrollToBottom();
+                            this.clearResponse();
+                            this.setLoading(true);
+                            const token = localStorage.getItem("tokenas");
+                            this.scrollToBottom();
+
+                            await api.post(
+                              "/api/expertChat/getResponse",
+                              { _id },
+                              token,
+                              dispatch,
+                              (err, res) => {
+                                if (!err) {
+                                  const chat = res;
+                                  let waitTime = 0;
+                                  this.scrollToBottom();
+                                  this.getResponse(chat);
+                                }
+                                console.log(res, err);
+                              }
+                            );
+                          }}
+                        >
+                          {Array.from(new Array(dropdown)).map((n, i) => (
+                            <Menu.Item key={Math.random() * 19302930}>
+                              {i + 1}
+                            </Menu.Item>
+                          ))}
+                        </Menu>
+                      );
+                      return (
+                        <div
+                          key={`${_id}${Math.random() * 100000}`}
+                          style={{
+                            background: "#FB9500",
+                            padding: "5px 10px",
+                            borderRadius: "5px",
+                            fontSize: "18px",
+                            color: "white",
+                            fontWeight: "bold",
+                            margin: "0px 5px",
+                            cursor: "pointer",
+                            minWidth: "100px"
+                          }}
+                        >
+                          <Dropdown placement={"topCenter"} overlay={menu}>
+                            <Button
+                              style={{ background: "#fb9500", border: "none" }}
+                            >
+                              Choose... <Icon type="up" />
+                            </Button>
+                          </Dropdown>
+                        </div>
+                      );
+                    }
+                    return (
+                      <div
+                        key={`${_id}${Math.random() * 100000}`}
+                        style={{
+                          background: "#FB9500",
+                          padding: "5px 10px",
+                          borderRadius: "5px",
+                          fontSize: "18px",
+                          color: "white",
+                          fontWeight: "bold",
+                          margin: "0px 5px",
+                          cursor: "pointer",
+                          minWidth: "100px"
+                        }}
+                        onClick={async () => {
+                          const { setChat, setLoading, setResponse } = this;
+                          let newChat = [
+                            ...this.state.chats,
+                            {
+                              message: response,
+                              time: new Date().toJSON(),
+                              status: "response",
+                              // ...chat,
+                              possibleResponse: this.state.possibleResponse,
+                              dropdown
+                            }
+                          ];
+
+                          this.setChat(newChat);
+                          await this.scrollToBottom();
+                          this.clearResponse();
+                          this.setLoading(true);
+                          const token = localStorage.getItem("tokenas");
+                          this.scrollToBottom();
+
+                          await api.post(
+                            "/api/expertChat/getResponse",
+                            { _id },
+                            token,
+                            dispatch,
+                            (err, res) => {
+                              if (!err) {
+                                const chat = res;
+                                let waitTime = 0;
+                                this.scrollToBottom();
+                                this.getResponse(chat);
+                              }
+                              console.log(res, err);
+                            }
+                          );
+                        }}
+                      >
+                        {response}
+                      </div>
+                    );
+                  }
+                )}
               </div>
             </div>
           </div>
@@ -251,17 +352,21 @@ class ExpertChat extends Component {
         ...this.state.chats,
         {
           message: questions[0],
-          time: Date.now(),
+          time: new Date().toJSON(),
           status: "message",
-          ...chat
+          dropdown: chat.dropdown
+          // ...chat
         }
       ];
       setChat(newChat);
+      // console.log({ dropdown: chat.dropdown });
+
       let possibleResponse =
-        chat.children &&
-        chat.children.map(({ _id, response }) => ({
-          _id,
-          response
+        chat.response &&
+        chat.response.map(response => ({
+          _id: chat._id,
+          response,
+          dropdown: chat.dropdown
         }));
       if (questions.length <= 1) {
         setLoading(false);
@@ -279,15 +384,13 @@ class ExpertChat extends Component {
             ...this.state.chats,
             {
               message: question,
-              time: Date.now(),
+              time: new Date().toJSON(),
               status: "message",
               ...chat
             }
           ];
-          // console.log({ newChat });
-          // console.log({ newChat: this.state.chats });
           setChat(newChat);
-           this.scrollToBottom();
+          this.scrollToBottom();
 
           if (questions.length - 1 == i) {
             setLoading(false);

@@ -1,18 +1,20 @@
 
 import * as userAction from "../../actions/userActions/userActionTypes"
 
-const initialstate={ loading: false,
-   user: {
-     _id:null,
+const initialstate = {
+  loading: false,
+  user: {
+    _id: null,
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     phone: "",
-   },
-   errors:[],
-  modal:false
-  }
+  },
+  errors: [],
+  resetPasswordEmail: "",
+  modal: false
+}
 
 export default function (state = initialstate, action) {
   switch (action.type) {
@@ -24,12 +26,14 @@ export default function (state = initialstate, action) {
       return initialstate;
     case userAction.USER_LOADING:
       return { ...state, loading: action.payload }
-      case userAction.ADD_ERR:
-        {
-          return {...state,errors:action.payload}
-        }
-        case userAction.SET_MODAL:
-          return {...state , modal:action.payload}
+    case userAction.ADD_ERR:
+      {
+        return { ...state, errors: action.payload }
+      }
+    case userAction.SET_MODAL:
+      return { ...state, modal: action.payload }
+    case userAction.ADD_RESETEMAIL:
+      return { ...state, resetPasswordEmail: action.payload }
     default:
       return state
   }

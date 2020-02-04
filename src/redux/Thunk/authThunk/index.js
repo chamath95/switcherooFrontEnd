@@ -113,5 +113,32 @@ api.post("/api/auth/verify/resend",{email},null,dispatch,()=>{
     console.log("done")
 })
 }
+const recover=(email,props)=>dispatch=>{
+    api.post("/api/auth/recover",{email},null,dispatch,(err,user)=>{
+        if(!err)
+        {
+            dispatch(actions.AddResetEmail(email));
+            if(props)
+            props.history.push("/resetmailsended")
+        }
+        console.log(err,user)
+      })
+}
+const resetpassword=(state,props)=>dispatch=>{
+    api.post(`/api/auth/reset/${props.match.params.token}`,state,null,dispatch,(err,message)=>{
+        if(!err)
+        {
+            alert(message.message)
+            props.history.push("/login")
+        } 
+        else
+        {
+            dispatch(actions.AddErr(err.errors))
+        setTimeout(()=>{
+        dispatch(actions.AddErr([]))
+        },1000);
+        }
+    });
+}
 
-export { SignUp, loadUser ,login,updateUser,deleteUser,resendEmail};
+export { SignUp, loadUser ,login,updateUser,deleteUser,resendEmail,recover,resetpassword};

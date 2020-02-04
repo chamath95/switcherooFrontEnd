@@ -4,7 +4,9 @@ import "./style.css";
 import { Link } from "react-router-dom";
 import { Row, Col, Form, Icon, Input, Button, Checkbox } from "antd";
 import logo from "../../assets/Icon-Prototype-Screens (3)/icons/logo.png";
-import { Formik } from "formik";
+import {withRouter} from "react-router-dom"
+import {connect} from "react-redux"
+import {recover} from "../../redux/Thunk/authThunk/index"
 const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 function ForgetPassword(props) {
@@ -46,8 +48,10 @@ function ForgetPassword(props) {
 
   const handleSubmit = e => {
     console.log(formData);
-    props.animationHandler()  //to down the animation
+    // props.animationHandler()  //to down the animation
     e.preventDefault();
+    if(formData.emailIsValid)
+    props.recoverPassword(email,props)
     // props.form.validateFieldsAndScroll((err, values) => {
     //   if (!err) {
     //     console.log("Received values of form: ", values);
@@ -96,6 +100,7 @@ function ForgetPassword(props) {
 
                 <Col span={22}>
                   <Button
+                  disabled={props.UserState.loading}
                     onClick={handleSubmit}
                     className="handelButtonRegisterStyle againStyle"
                   >
@@ -103,7 +108,7 @@ function ForgetPassword(props) {
                   </Button>
                 </Col>
 
-                <Col onClick={handleSubmit} span={22} className="notnowBtn">
+                <Col onClick={props.animationHandler} span={22} className="notnowBtn">
                 
                     <div > Not Now!</div>
                  
@@ -120,4 +125,10 @@ function ForgetPassword(props) {
     </div>
   );
 }
-export default ForgetPassword;
+const mapDispatchToProps = (Dispatch) => ({
+  recoverPassword: (state,props) => Dispatch(recover(state,props))
+});
+const mapStateToProps = state => ({
+  UserState: state.userReducer
+});
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(ForgetPassword));

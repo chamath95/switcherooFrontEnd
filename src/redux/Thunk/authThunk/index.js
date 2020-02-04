@@ -24,11 +24,11 @@ const SignUp = (data,props) => dispatch => {
         if (!err) {
 
             dispatch(actions.AddUser(res.user));
-            // notification["success"]({
-            //     message: 'Welcome User',
-            //     description:
-            //       'Please check you email and confirm your account. Thanku !😇  ',
-            //   });
+            notification["success"]({
+                message: 'Welcome User',
+                description:
+                  'Please check you email and confirm your account. Thanku !😇  ',
+              });
             savetoken(res.token)
         }
         else

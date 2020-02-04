@@ -7,7 +7,7 @@ let timeoutGlobel = 10000
 const token = localStorage.getItem("tokenas");
 const financialDataPost = (data, callback) => dispatch => {
   dispatch(actions.LoadingFinancialData(true));
-  console.log(data);
+  console.log("data json", data);
   const options = {
     method: "POST",
     body: JSON.stringify({ ...data }),
@@ -54,9 +54,9 @@ const financialDataGet = id => dispatch => {
             dispatch(actions.removeFinancialData({}));
           }
         });
-      else if (res.status === 400) {
+      else if (res.status === 500) {
         res.json().then(err => {
-          dispatch(actions.setFinancialData({}));
+          dispatch(actions.removeFinancialData({}));
         });
       }
     })

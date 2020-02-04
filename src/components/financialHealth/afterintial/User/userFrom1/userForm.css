@@ -33,7 +33,7 @@
 .fo_1_con p.ph3 {
   margin: 24px 0 1em 0;
 }
-.fo_1_con .selectPRo .ant-select-selection {
+.fo_1_con .maltaback .ant-select-selection {
   border: 0 !important;
   background: #fb9500;
   color: white;
@@ -99,6 +99,7 @@
   margin: 0 70px 0 0;
   cursor: pointer;
   height: 40px;
+  color: white;
   background: #cccccc;
   border-radius: 20px;
   border: 2px solid gray;
@@ -136,10 +137,16 @@
 }
 
 .q1.posstionChange {
-  /* position: relative; */
-  /* top: 25px; */
+  position: relative;
+  top: 25px;
 }
-
+.mysetting{
+  display: flex;
+}
+.user_form1 .errormissting{
+  position: relative;
+  left: -180px;
+}
 .q1 .radio-container.container_malta {
   background: #fb9500;
   border: 1px solid #fb9500;

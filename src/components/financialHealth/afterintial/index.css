@@ -20,3 +20,7 @@
 .innerIConinner{
   width: 90%;
 }
+
+.radio-container label {
+  width: 100%;
+}

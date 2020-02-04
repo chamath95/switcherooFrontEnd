@@ -18,86 +18,99 @@ class App extends React.Component {
     defaltSet: "user1",
     userId: "",
     current: 0,
-    dateOfBirth: Date.now(),
-    maritalStatus: "Single",
+    dateOfBirth: "",
+    maritalStatus: false,
+    maritalStatusEmpty: false,
+    dateOfBirthEmpty: false,
+    childrenFinanciallyDependentEmpty: "",
     maritalStatusOptions: ["Married", "Single", "Widowed"],
-    selfEmployedOrPaye: "Self Employed",
-    childrenFinanciallyDependent: 2,
-    childrenFinanciallyDependentOptions: [0,1, 2, 3,4,5,"5+"],
+    selfEmployedOrPaye: "",
+    selfEmployedOrPayeEmpty: false,
+    childrenFinanciallyDependent: "",
+    childrenFinanciallyDependentOptions: [0, 1, 2, 3, 4, 5, "5+"],
     publicOrPrivateSector: "",
+    publicOrPrivateSectorEmpty: false,
     selfEmployedOrPayeOptions: ["Self Employed", "Paye"],
+
     basicIncome: 0,
+    basicIncomeEmpty: false,
     basicIncomeDisable: false,
 
     overTimeEarnedInyear: 0,
     overTimeEarnedInyearDisable: false,
+    overTimeEarnedInyearEmpty: false,
 
     commissionEarnedInYear: 0,
     commissionEarnedInYearDisable: false,
+    commissionEarnedInYearEmpty: false,
 
     bonusEarnedInYear: 0,
     bonusEarnedInYearDisable: false,
+    bonusEarnedInYearEmpty: false,
 
     guaranteedAllowance: 0,
     guaranteedAllowanceDisable: false,
+    guaranteedAllowanceEmpty: false,
 
     otherVariableIncome: 0,
     otherVariableIncomeDisable: false,
+    otherVariableIncomeEmpty: false,
 
     annualPension: 0,
     annualPensionDisable: false,
+    annualPensionEmpty: false,
 
     nusrseryOrChildminding: 0,
     nusrseryOrChildmindingDisable: false,
+    nusrseryOrChildmindingEmpty: false,
 
     spousalMaintenanceCosts: 0,
     spousalMaintenanceCostsDisable: false,
+    spousalMaintenanceCostsEmpty: false,
 
     monthlyCreditCardCharges: 0,
     monthlyCreditCardChargesDisable: false,
+    monthlyCreditCardChargesEmpty: false,
 
     overDraftLimit: 0,
     overDraftLimitDisable: false,
+    overDraftLimitEmpty: false,
 
     creditCardLimit: 0,
     creditCardLimitDisable: false,
+    creditCardLimitEmpty: false,
 
     overDraftCharges: 0,
     overDraftChargesDisable: false,
+    overDraftChargesEmpty: false,
 
     monthlyLoanRepayments: 0,
     monthlyLoanRepaymentsDisable: false,
+    monthlyLoanRepaymentsEmpty: false,
 
     monthlyCashFlow: 0,
-    monthlyCashFlowDisable: false
+    monthlyCashFlowDisable: false,
+    monthlyCashFlowEmpty: false
   };
-  clickRadio = e => {
-    // var radioContainer =
-    var label = e.target.childNodes[1];
-    if (label) {
-      label.click();
-    }
-  };
+
   handleMerital = value => {
-    this.setState({ maritalStatus: value });
+    this.setState({ maritalStatus: value, maritalStatusEmpty: false });
   };
   handleWork = value => {
     this.setState({ selfEmployedOrPaye: value });
   };
   handleChild = value => {
-    this.setState({ childrenFinanciallyDependent: value });
+    this.setState({
+      childrenFinanciallyDependent: value,
+      childrenFinanciallyDependentEmpty: false
+    });
   };
-  handleQ = e => {
-    var radioContainers = e.target.parentNode.parentNode.childNodes;
-    this.setState({ [e.target.name]: e.target.value });
-    for (var i = 0; i < radioContainers.length; i++) {
-      var input = radioContainers[i].childNodes[0];
-      if (input.checked) {
-        input.parentNode.style.background = "#fb9500";
-      } else {
-        input.parentNode.style.background = "lightgray";
-      }
-    }
+
+  handleRedioBtn = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+      [`${e.target.name}Empty`]: false
+    });
   };
   static getDerivedStateFromProps(nextProps, prevState) {
     if (
@@ -126,7 +139,22 @@ class App extends React.Component {
         creditCardLimit,
         overDraftCharges,
         monthlyLoanRepayments,
-        monthlyCashFlow
+        monthlyCashFlow,
+        commissionEarnedInYearDisable,
+        bonusEarnedInYearDisable,
+        guaranteedAllowanceDisable,
+        otherVariableIncomeDisable,
+        annualPensionDisable,
+        overTimeEarnedInyearDisable,
+        nusrseryOrChildmindingDisable,
+        spousalMaintenanceCostsDisable,
+        monthlyCreditCardChargesDisable,
+        overDraftLimitDisable,
+        creditCardLimitDisable,
+        overDraftChargesDisable,
+        monthlyLoanRepaymentsDisable,
+        monthlyCashFlowDisable,
+        basicIncomeDisable
       } = nextProps.financial_back_data.applicantOne;
       const { userId } = nextProps;
 
@@ -153,13 +181,53 @@ class App extends React.Component {
         creditCardLimit,
         overDraftCharges,
         monthlyLoanRepayments,
-        monthlyCashFlow
+        monthlyCashFlow,
+        commissionEarnedInYearDisable,
+        bonusEarnedInYearDisable,
+        guaranteedAllowanceDisable,
+        otherVariableIncomeDisable,
+        annualPensionDisable,
+        overTimeEarnedInyearDisable,
+        nusrseryOrChildmindingDisable,
+        spousalMaintenanceCostsDisable,
+        monthlyCreditCardChargesDisable,
+        overDraftLimitDisable,
+        creditCardLimitDisable,
+        overDraftChargesDisable,
+        monthlyLoanRepaymentsDisable,
+        monthlyCashFlowDisable,
+        basicIncomeDisable
       };
     }
 
     return prevState;
   }
   onsubmitForm = () => {
+    let form1Validate = true;
+    let form2Validate = true;
+    let form3Validate = true;
+
+    let maritalStatusEmpty = false;
+    let dateOfBirthEmpty = false;
+    let childrenFinanciallyDependentEmpty = false;
+    let selfEmployedOrPayeEmpty = false;
+    let publicOrPrivateSectorEmpty = false;
+    let basicIncomeEmpty = false;
+    let overTimeEarnedInyearEmpty = false;
+    let commissionEarnedInYearEmpty = false;
+    let bonusEarnedInYearEmpty = false;
+    let guaranteedAllowanceEmpty = false;
+    let otherVariableIncomeEmpty = false;
+    let annualPensionEmpty = false;
+    let nusrseryOrChildmindingEmpty = false;
+    let spousalMaintenanceCostsEmpty = false;
+    let monthlyCreditCardChargesEmpty = false;
+    let overDraftLimitEmpty = false;
+    let creditCardLimitEmpty = false;
+    let overDraftChargesEmpty = false;
+    let monthlyLoanRepaymentsEmpty = false;
+    let monthlyCashFlowEmpty = false;
+
     const {
       maritalStatus,
       selfEmployedOrPaye,
@@ -180,7 +248,23 @@ class App extends React.Component {
       creditCardLimit,
       overDraftCharges,
       monthlyLoanRepayments,
-      monthlyCashFlow
+      monthlyCashFlow,
+      basicIncomeDisable,
+      current,
+      commissionEarnedInYearDisable,
+      bonusEarnedInYearDisable,
+      guaranteedAllowanceDisable,
+      otherVariableIncomeDisable,
+      annualPensionDisable,
+      overTimeEarnedInyearDisable,
+      nusrseryOrChildmindingDisable,
+      spousalMaintenanceCostsDisable,
+      monthlyCreditCardChargesDisable,
+      overDraftLimitDisable,
+      creditCardLimitDisable,
+      overDraftChargesDisable,
+      monthlyLoanRepaymentsDisable,
+      monthlyCashFlowDisable
     } = this.state;
     const newItem = {
       maritalStatus,
@@ -202,13 +286,133 @@ class App extends React.Component {
       creditCardLimit,
       overDraftCharges,
       monthlyLoanRepayments,
-      monthlyCashFlow
+      monthlyCashFlow,
+      commissionEarnedInYearDisable,
+      bonusEarnedInYearDisable,
+      guaranteedAllowanceDisable,
+      otherVariableIncomeDisable,
+      annualPensionDisable,
+      overTimeEarnedInyearDisable,
+      nusrseryOrChildmindingDisable,
+      spousalMaintenanceCostsDisable,
+      monthlyCreditCardChargesDisable,
+      overDraftLimitDisable,
+      creditCardLimitDisable,
+      overDraftChargesDisable,
+      monthlyLoanRepaymentsDisable,
+      monthlyCashFlowDisable,
+      basicIncomeDisable
     };
-    if (this.state.current === 0) {
+    if (!dateOfBirth) {
+      dateOfBirthEmpty = true;
+      form1Validate = false;
+    }
+    if (!childrenFinanciallyDependent) {
+      childrenFinanciallyDependentEmpty = true;
+      form1Validate = false;
+    }
+    if (!maritalStatus) {
+      maritalStatusEmpty = true;
+      form1Validate = false;
+    }
+    if (!publicOrPrivateSector) {
+      publicOrPrivateSectorEmpty = true;
+      form1Validate = false;
+    }
+    if (!selfEmployedOrPaye) {
+      selfEmployedOrPayeEmpty = true;
+      form1Validate = false;
+    }
+    if (!basicIncomeDisable && !basicIncome && current === 1) {
+      basicIncomeEmpty = true;
+      form2Validate = false;
+    }
+    if (
+      !overTimeEarnedInyearDisable &&
+      !overTimeEarnedInyear &&
+      current === 1
+    ) {
+      overTimeEarnedInyearEmpty = true;
+      form2Validate = false;
+    }
+    if (
+      !commissionEarnedInYearDisable &&
+      !commissionEarnedInYear &&
+      current === 1
+    ) {
+      commissionEarnedInYearEmpty = true;
+      form2Validate = false;
+    }
+    if (!bonusEarnedInYearDisable && !bonusEarnedInYear && current === 1) {
+      bonusEarnedInYearEmpty = true;
+      form2Validate = false;
+    }
+    if (!guaranteedAllowanceDisable && !guaranteedAllowance && current === 1) {
+      guaranteedAllowanceEmpty = true;
+      form2Validate = false;
+    }
+    if (!otherVariableIncomeDisable && !otherVariableIncome && current === 1) {
+      otherVariableIncomeEmpty = true;
+      form2Validate = false;
+    }
+    if (!annualPensionDisable && !annualPension && current === 1) {
+      annualPensionEmpty = true;
+      form2Validate = false;
+    }
+
+    if (
+      !nusrseryOrChildmindingDisable &&
+      !nusrseryOrChildminding &&
+      current === 2
+    ) {
+      nusrseryOrChildmindingEmpty = true;
+      form3Validate = false;
+    }
+    if (
+      !spousalMaintenanceCostsDisable &&
+      !spousalMaintenanceCosts &&
+      current === 2
+    ) {
+      spousalMaintenanceCostsEmpty = true;
+      form3Validate = false;
+    }
+    if (
+      !monthlyCreditCardChargesDisable &&
+      !monthlyCreditCardCharges &&
+      current === 2
+    ) {
+      monthlyCreditCardChargesEmpty = true;
+      form3Validate = false;
+    }
+    if (!overDraftLimitDisable && !overDraftLimit && current === 2) {
+      overDraftLimitEmpty = true;
+      form3Validate = false;
+    }
+    if (!creditCardLimitDisable && !creditCardLimit && current === 2) {
+      creditCardLimitEmpty = true;
+      form3Validate = false;
+    }
+    if (!overDraftChargesDisable && !overDraftCharges && current === 2) {
+      overDraftChargesEmpty = true;
+      form3Validate = false;
+    }
+    if (
+      !monthlyLoanRepaymentsDisable &&
+      !monthlyLoanRepayments &&
+      current === 2
+    ) {
+      monthlyLoanRepaymentsEmpty = true;
+      form3Validate = false;
+    }
+    if (!monthlyCashFlowDisable && !monthlyCashFlow && current === 2) {
+      monthlyCashFlowEmpty = true;
+      form3Validate = false;
+    }
+    if (this.state.current === 0 && form1Validate) {
       this.setState({ current: 1 });
-    } else if (this.state.current === 1) {
+    } else if (this.state.current === 1 && form2Validate) {
       this.setState({ current: 2 });
-    } else if (this.state.current === 2) {
+    } else if (this.state.current === 2 && form3Validate) {
       this.props.SetApplicantOneData(
         {
           userId: this.props.userId,
@@ -229,6 +433,37 @@ class App extends React.Component {
         }
       );
     }
+    if (!form1Validate) {
+      this.setState({
+        selfEmployedOrPayeEmpty,
+        publicOrPrivateSectorEmpty,
+        maritalStatusEmpty,
+        dateOfBirthEmpty,
+        childrenFinanciallyDependentEmpty
+      });
+    } else if (!form2Validate) {
+      this.setState({
+        basicIncomeEmpty,
+        basicIncomeEmpty,
+        overTimeEarnedInyearEmpty,
+        commissionEarnedInYearEmpty,
+        bonusEarnedInYearEmpty,
+        guaranteedAllowanceEmpty,
+        otherVariableIncomeEmpty,
+        annualPensionEmpty
+      });
+    } else {
+      this.setState({
+        nusrseryOrChildmindingEmpty,
+        spousalMaintenanceCostsEmpty,
+        monthlyCreditCardChargesEmpty,
+        overDraftLimitEmpty,
+        creditCardLimitEmpty,
+        overDraftChargesEmpty,
+        monthlyLoanRepaymentsEmpty,
+        monthlyCashFlowEmpty
+      });
+    }
   };
   onChangeme = current => {
     this.setState({ current });
@@ -236,19 +471,17 @@ class App extends React.Component {
   onChangeSecond = e => {
     this.setState({
       [e.target.name]: 0,
-      [`${e.target.name}Disable`]: e.target.checked
+      [`${e.target.name}Disable`]: e.target.checked,
+      [`${e.target.name}Empty`]: false
     });
   };
   onChangeback = () => {
-    debugger
     if (this.state.current === 2) {
       this.setState({ current: 1 });
     } else if (this.state.current === 1) {
       this.setState({ current: 0 });
-    }
-    else if (this.state.current === 0) {
+    } else if (this.state.current === 0) {
       this.props.changeProfRout(1);
-     
     }
   };
   onChangeTextSecond = e => {
@@ -256,14 +489,16 @@ class App extends React.Component {
 
     if (reg.test(e.target.value)) {
       this.setState({
-        [e.target.name]: Number(e.target.value)
+        [e.target.name]: Number(e.target.value),
+        [`${e.target.name}Empty`]: false
       });
     }
   };
 
   onChangeDate = (date, dateString) => {
     this.setState({
-      dateOfBirth: date
+      dateOfBirth: date,
+      dateOfBirthEmpty: false
     });
   };
 
@@ -281,8 +516,17 @@ class App extends React.Component {
     return (
       <div className="user_form">
         <TopUserNavigation current={current} onChange={this.onChangeme} />
-        <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-          <div className="innerIConinner" style={{ padding: "20px", width:"90%" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          <div
+            className="innerIConinner"
+            style={{ padding: "20px", width: "90%" }}
+          >
             {this.UserFormRender()}
           </div>
         </div>

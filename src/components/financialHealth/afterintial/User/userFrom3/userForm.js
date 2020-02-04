@@ -20,7 +20,15 @@ export default class userForm extends Component {
       monthlyLoanRepayments,
       monthlyLoanRepaymentsDisable,
       monthlyCashFlow,
-      monthlyCashFlowDisable
+      monthlyCashFlowDisable,
+      nusrseryOrChildmindingEmpty,
+      spousalMaintenanceCostsEmpty,
+      monthlyCreditCardChargesEmpty,
+      overDraftLimitEmpty,
+      creditCardLimitEmpty,
+      overDraftChargesEmpty,
+      monthlyLoanRepaymentsEmpty,
+      monthlyCashFlowEmpty
     } = this.props.allState;
     const {
       onChangeTextSecond,
@@ -31,14 +39,17 @@ export default class userForm extends Component {
       <div className="fo_2_con">
         <p className="note_text">
           {" "}
-          Please try and be as accurate as possible in describing your finance and expenses. Finance fees and expenses figures are monthly. Check box if it is not applicable to you
+          Please try and be as accurate as possible in describing your finance
+          and expenses. Finance fees and expenses figures are monthly. Check box
+          if it is not applicable to you
         </p>
         <Row className="formUser-row-gs">
           <Checkbox
             itemName={[
               "nusrseryOrChildminding",
               nusrseryOrChildminding,
-              nusrseryOrChildmindingDisable
+              nusrseryOrChildmindingDisable,
+              nusrseryOrChildmindingEmpty
             ]}
             onChangeTextSecond={onChangeTextSecond}
             onChangefunc={onChangeSecond}
@@ -50,19 +61,22 @@ export default class userForm extends Component {
             itemName={[
               "spousalMaintenanceCosts",
               spousalMaintenanceCosts,
-              spousalMaintenanceCostsDisable
+              spousalMaintenanceCostsDisable,
+              spousalMaintenanceCostsEmpty
             ]}
             onChangeTextSecond={onChangeTextSecond}
             onChangefunc={onChangeSecond}
           >
-            How much do you pay in monthly maintenance costs i.e. (ex) spousal support?
+            How much do you pay in monthly maintenance costs i.e. (ex) spousal
+            support?
           </Checkbox>
 
           <Checkbox
             itemName={[
               "creditCardLimit",
               creditCardLimit,
-              creditCardLimitDisable
+              creditCardLimitDisable,
+              creditCardLimitEmpty
             ]}
             onChangeTextSecond={onChangeTextSecond}
             onChangefunc={onChangeSecond}
@@ -74,7 +88,8 @@ export default class userForm extends Component {
             itemName={[
               "monthlyCreditCardCharges",
               monthlyCreditCardCharges,
-              monthlyCreditCardChargesDisable
+              monthlyCreditCardChargesDisable,
+              monthlyCreditCardChargesEmpty,
             ]}
             onChangeTextSecond={onChangeTextSecond}
             onChangefunc={onChangeSecond}
@@ -82,7 +97,13 @@ export default class userForm extends Component {
             How much do you pay in monthly credit card charges?
           </Checkbox>
           <Checkbox
-            itemName={["overDraftLimit", overDraftLimit, overDraftLimitDisable]}
+            itemName={[
+              "overDraftLimit",
+
+              overDraftLimit,
+              overDraftLimitDisable,
+              overDraftLimitEmpty,
+            ]}
             onChangeTextSecond={onChangeTextSecond}
             onChangefunc={onChangeSecond}
           >
@@ -92,7 +113,9 @@ export default class userForm extends Component {
             itemName={[
               "overDraftCharges",
               overDraftCharges,
-              overDraftChargesDisable
+              
+              overDraftChargesDisable,
+              overDraftChargesEmpty,
             ]}
             onChangeTextSecond={onChangeTextSecond}
             onChangefunc={onChangeSecond}
@@ -103,7 +126,8 @@ export default class userForm extends Component {
             itemName={[
               "monthlyLoanRepayments",
               monthlyLoanRepayments,
-              monthlyLoanRepaymentsDisable
+              monthlyLoanRepaymentsDisable,
+              monthlyLoanRepaymentsEmpty,
             ]}
             onChangeTextSecond={onChangeTextSecond}
             onChangefunc={onChangeSecond}
@@ -114,18 +138,25 @@ export default class userForm extends Component {
             itemName={[
               "monthlyCashFlow",
               monthlyCashFlow,
-              monthlyCashFlowDisable
+              monthlyCashFlowDisable,
+              monthlyCashFlowEmpty,
             ]}
             onChangeTextSecond={onChangeTextSecond}
             onChangefunc={onChangeSecond}
           >
-            Do you have a monthly cashflow shortfall/surplus from properties you rent? 
-            (please include shortfall as a negative and surplus cashflow as a positive figure)
+            Do you have a monthly cashflow shortfall/surplus from properties you
+            rent? (please include shortfall as a negative and surplus cashflow
+            as a positive figure)
           </Checkbox>
 
-          <Col lg={10} >
+          <Col lg={10}>
             <div className="btn-div">
-              <button onClick={this.props.thisObject.onChangeback} className="btn1">Back</button>
+              <button
+                onClick={this.props.thisObject.onChangeback}
+                className="btn1"
+              >
+                Back
+              </button>
 
               <Button onClick={onsubmitForm} className="btn2">
                 Save & Countinue

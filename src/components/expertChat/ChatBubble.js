@@ -6,7 +6,7 @@ import EditImage from "../../assets/edit.png";
 const Bubble = styled.div`
   ${({ message }) => `background: ${message ? "#FB9500" : "#707070"};`}
   position: relative;
-  min-width: 60%;
+  min-width: 85%;
   border-radius: 15px;
   padding: 25px 15px;
   margin: 10px 0px;
@@ -50,6 +50,7 @@ const Chatbubble = ({
   dropdown,
   ...props
 }) => {
+  // console.log(purge(children));
   return (
     <div
       style={{ position: "relative" }}
@@ -58,8 +59,9 @@ const Chatbubble = ({
       <Bubble
         message={message}
         className="talk-bubble tri-right round btm-left"
+        dangerouslySetInnerHTML={{ __html: purge(children) }}
       >
-        {children}
+        {/* {purge(children)} */}
       </Bubble>
       {!message && (
         <span
@@ -85,4 +87,17 @@ const Chatbubble = ({
   );
 };
 
+function purge(text) {
+  const match = String(text).match(/\[(emoji=.*?)\]/);
+  if (!match) return text;
+  const main = match[match.length - 1].replace("emoji=", "");
+  const raw = match[0];
+  const som = text.replace(
+    raw,
+    `<img className="img" src="images/chat/${main}" />`
+  );
+  return som;
+}
+
 export default Chatbubble;
+export { purge };

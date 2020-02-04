@@ -37,6 +37,7 @@ const post = (url, data,auth, dispatch, callback) => {
         } )
 }
 const get = (url, data,auth, dispatch, callback) => {
+    console.log(url);
     dispatch(actions.Loading(true))
     const options = {
         method: "GET",

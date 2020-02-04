@@ -10,14 +10,12 @@ const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 function info1() {
   Modal.info({
-    title:
-      "Sorry we don't do Investment Properties yet - check back with us later"
+    title: "Sorry we don't do Investment Properties yet - check back with us later",
   });
 }
 function info2() {
   Modal.info({
-    title:
-      "Sorry we don't do Self-build properties yet - check back with us later"
+    title: "Sorry we don't do Self-build properties yet - check back with us later",
   });
 }
 function GetStarted(props) {
@@ -26,47 +24,35 @@ function GetStarted(props) {
     filedBankruptcyValidation: false,
     filedBankruptcyHelp: "",
     filedBankruptcyValidationStatus: "error",
-    filedBankruptcyEmpty: false,
 
     failedToPayLoan: "",
     failedToPayLoanValidation: false,
     failedToPayLoanHelp: "",
     failedToPayLoanValidationStatus: "error",
-    failedToPayLoanEmpty: false,
 
     purposeOfMortgage: "",
     purposeOfMortgageValidation: "",
     purposeOfMortgageHelp: "",
     purposeOfMortgageValidationStatus: "error",
-    purposeOfMortgageEmpty: false,
 
     peopleOnMortgage: "one",
 
     firstNameSecondApplicant: "",
     lastNameSecondApplicant: "",
     contructionNature: "",
-    contructionNatureEmpty: false,
     emailSecondApplicant: "",
     emailSecondApplicantValidation: false,
     emailSecondApplicantHelp: "",
     emailSecondApplicantValidationStatus: "error",
-    firstNameSecondApplicantEmpty: false,
-    lastNameSecondApplicantEmpty: false,
-    emailSecondApplicantEmpty: false,
 
     emailSecondApplicantre: "",
     emailSecondApplicantreValidation: false,
     emailSecondApplicantreHelp: "",
     emailSecondApplicantreValidationStatus: "error",
-    emailSecondApplicantreEmpty: false,
-
     phoneSecondApplicant: "",
     phoneSecondApplicantValidateStatus: "error",
     phoneSecondApplicanteHelp: "Enter a phone Number!",
-    phoneSecondApplicantIsValid: false,
-    phoneSecondApplicantEmpty: false,
-
-    overAllFormValidate: false
+    phoneSecondApplicantIsValid: false
   });
   const [q4, setQ4] = useState(false);
   function clickRadio(e) {
@@ -81,25 +67,21 @@ function GetStarted(props) {
       case "filedBankruptcy":
       case "failedToPayLoan":
       case "purposeOfMortgage":
-      case "contructionNature":
         if (value === "") {
           setQuestions({
             ...questions,
             [name]: value,
-            [`${name}Validation`]: false,
+            [`${name}Validation`]: "error",
             [`${name}Help`]: "please Select one of above",
-            [`${name}ValidationStatus`]: false,
-            [`${name}Empty`]: false
+            [`${name}ValidationStatus`]: false
           });
         } else {
           setQuestions({
             ...questions,
             [name]: value,
-            [`${name}Validation`]: true,
+            [`${name}Validation`]: "success",
             [`${name}Help`]: "",
-            [`${name}ValidationStatus`]: true,
-            [`${name}Empty`]: false,
-            overAllFormValidate: true
+            [`${name}ValidationStatus`]: true
           });
         }
         break;
@@ -110,8 +92,7 @@ function GetStarted(props) {
             [name]: value,
             emailSecondApplicantValidationStatus: "error",
             emailSecondApplicantHelp: "You email is not valid",
-            emailSecondApplicantValidation: false,
-            [`${name}Empty`]: false
+            emailSecondApplicantValidation: false
           });
         } else {
           setQuestions({
@@ -119,8 +100,7 @@ function GetStarted(props) {
             [name]: value,
             emailSecondApplicantValidationStatus: "success",
             emailSecondApplicantHelp: "",
-            emailSecondApplicantValidation: true,
-            [`${name}Empty`]: false,
+            emailSecondApplicantValidation: true
           });
         }
         break;
@@ -131,8 +111,7 @@ function GetStarted(props) {
             [name]: value,
             emailSecondApplicantreValidationStatus: "error",
             emailSecondApplicantreHelp: "You email is not match",
-            emailSecondApplicantreValidation: false,
-            [`${name}Empty`]: false
+            emailSecondApplicantreValidation: false
           });
         } else {
           setQuestions({
@@ -140,21 +119,19 @@ function GetStarted(props) {
             [name]: value,
             emailSecondApplicantreValidationStatus: "success",
             emailSecondApplicantreHelp: "",
-            emailSecondApplicantreValidation: true,
-            [`${name}Empty`]: false,
-            overAllFormValidate: true
+            emailSecondApplicantreValidation: true
           });
         }
         break;
       case "phoneSecondApplicant":
         if (!phoneno.test(value)) {
+          console.log(value);
           setQuestions({
             ...questions,
             [name]: value,
             phoneSecondApplicantValidateStatus: "error",
             phoneSecondApplicanteHelp: "Enter a valid Number!",
-            phoneSecondApplicantIsValid: false,
-            [`${name}Empty`]: false
+            phoneSecondApplicantIsValid: false
           });
         } else {
           setQuestions({
@@ -162,9 +139,7 @@ function GetStarted(props) {
             [name]: value,
             phoneSecondApplicantValidateStatus: "success",
             phoneSecondApplicantHelp: "",
-            phoneSecondApplicantIsValid: true,
-            [`${name}Empty`]: false,
-            overAllFormValidate: true
+            phoneSecondApplicantIsValid: true
           });
         }
         break;
@@ -196,12 +171,7 @@ function GetStarted(props) {
     ) {
       validateRadio(e.target.name, e.target.value);
     } else {
-      debugger;
-      setQuestions({
-        ...questions,
-        overAllFormValidate: true,
-        [e.target.name]: e.target.value
-      });
+      setQuestions({ ...questions, [e.target.name]: e.target.value });
     }
     if (e.target.value !== "") {
       e.target.style.background = "#fb9500";
@@ -212,7 +182,8 @@ function GetStarted(props) {
     }
   };
   useEffect(() => {
-    if (props.financial_back_data.filedBankruptcy) {
+    console.log(props.financial_back_data)
+    if (props.financial_back_data !== "") {
       const {
         filedBankruptcy,
         failedToPayLoan,
@@ -251,17 +222,6 @@ function GetStarted(props) {
   }, [props.filedBankruptcy]);
 
   const onsubmitForm = () => {
-    let overAllFormValidate = true;
-    let filedBankruptcyEmpty = false;
-    let failedToPayLoanEmpty = false;
-    let contructionNatureEmpty = false;
-    let purposeOfMortgageEmpty = false;
-    let firstNameSecondApplicantEmpty = false;
-    let phoneSecondApplicantEmpty = false;
-    let lastNameSecondApplicantEmpty = false;
-    let emailSecondApplicantEmpty = false;
-    let emailSecondApplicantreEmpty = false;
-
     const {
       filedBankruptcy,
       failedToPayLoan,
@@ -271,60 +231,8 @@ function GetStarted(props) {
       lastNameSecondApplicant,
       emailSecondApplicant,
       contructionNature,
-      phoneSecondApplicant,
-      emailSecondApplicantre
+      phoneSecondApplicant
     } = questions;
-    if (filedBankruptcy === "") {
-      overAllFormValidate = false;
-      filedBankruptcyEmpty = true;
-    }
-    if (!failedToPayLoan) {
-      overAllFormValidate = false;
-      failedToPayLoanEmpty = true;
-    }
-    if (!purposeOfMortgage) {
-      overAllFormValidate = false;
-      purposeOfMortgageEmpty = true;
-    }
-    if (!contructionNature) {
-      overAllFormValidate = false;
-      contructionNatureEmpty = true;
-    }
-    if (peopleOnMortgage === "two") {
-      if (!firstNameSecondApplicant) {
-        overAllFormValidate = false;
-        firstNameSecondApplicantEmpty = true;
-      }
-      if (!lastNameSecondApplicant) {
-        lastNameSecondApplicantEmpty = true;
-        overAllFormValidate = false;
-      }
-      if (!emailSecondApplicant) {
-        emailSecondApplicantEmpty = true;
-        overAllFormValidate = false;
-      }
-      if (!emailSecondApplicantre) {
-        emailSecondApplicantreEmpty = true;
-        overAllFormValidate = false;
-      }
-      if (!phoneSecondApplicant) {
-        phoneSecondApplicantEmpty = true;
-        overAllFormValidate = false;
-      }
-    }
-
-    setQuestions({
-      ...questions,
-      filedBankruptcyEmpty,
-      failedToPayLoanEmpty,
-      contructionNatureEmpty,
-      purposeOfMortgageEmpty,
-      firstNameSecondApplicantEmpty,
-      phoneSecondApplicantEmpty,
-      lastNameSecondApplicantEmpty,
-      emailSecondApplicantEmpty,
-      emailSecondApplicantreEmpty
-    });
     const sigle = {
       filedBankruptcy,
       failedToPayLoan,
@@ -343,34 +251,29 @@ function GetStarted(props) {
       contructionNature,
       phoneSecondApplicant
     };
-    if (overAllFormValidate) {
-      if (
-        peopleOnMortgage === "two" &&
-        emailSecondApplicantreValidation &&
-        emailSecondApplicantValidation
-      ) {
-        props.set_financial_BackGround(
-          {
-            userId: props.userId,
-            applicants: {
-              ...props.financial_back_data,
-              ...double
-            }
-          },
-          callback
-        );
-      } else {
-        props.set_financial_BackGround(
-          {
-            userId: props.userId,
-            applicants: {
-              ...props.financial_back_data,
-              ...sigle
-            }
-          },
-          callback
-        );
-      }
+    console.log(questions);
+    if (peopleOnMortgage === "two") {
+      props.set_financial_BackGround(
+        {
+          userId: props.userId,
+          applicants: {
+            ...props.financial_back_data,
+            ...double
+          }
+        },
+        callback
+      );
+    } else {
+      props.set_financial_BackGround(
+        {
+          userId: props.userId,
+          applicants: {
+            ...props.financial_back_data,
+            ...sigle
+          }
+        },
+        callback
+      );
     }
   };
   const callback = () => {
@@ -380,26 +283,14 @@ function GetStarted(props) {
   function handleChange(value) {
     console.log(`selected ${value}`);
   }
-  const {
-    filedBankruptcyEmpty,
-    failedToPayLoanEmpty,
-    purposeOfMortgageEmpty,
-    firstNameSecondApplicantEmpty,
-    lastNameSecondApplicantEmpty,
-    emailSecondApplicantEmpty,
-    contructionNatureEmpty,
-    phoneSecondApplicantEmpty,
-    emailSecondApplicantreEmpty,
-    emailSecondApplicantValidation,
-    emailSecondApplicantreValidation,
-    overAllFormValidate
-  } = questions;
+
+
+
   return (
     <div className="financial-health innerIConinner">
       <Row className="fh-row-gs">
-        <Col lg={24} className="col3 mysetting">
+        <Col lg={24} className="col3">
           <p className="heading3">What is the mortgage for?</p>
-          {purposeOfMortgageEmpty && <span>* This field cannot be empty</span>}
         </Col>
         <Col lg={24} className="q1 q3">
           <div
@@ -483,15 +374,14 @@ function GetStarted(props) {
           </div>
         </Col>
 
-        <Col lg={24} className="col3 mysetting">
+        <Col lg={24} className="col3">
           <p className="heading3">Nature of the construction?</p>
-          {contructionNatureEmpty && <span>* This field cannot be empty</span>}
         </Col>
         <Col lg={24} className="q1 q3">
           <div
             onClick={e => clickRadio(e)}
             className={
-              questions.contructionNature === "Part of a new development"
+              questions.contructionNature === "Looking For Investment Property"
                 ? "radio-container container_malta"
                 : "radio-container"
             }
@@ -501,8 +391,10 @@ function GetStarted(props) {
               type="radio"
               name="contructionNature"
               id="mortfl"
+              className=""
               checked={
-                questions.contructionNature === "Part of a new development"
+                questions.contructionNature ===
+                "Part of a new development"
               }
               value="Part of a new development"
             />
@@ -511,7 +403,7 @@ function GetStarted(props) {
           <div
             onClick={clickRadio}
             className={
-              questions.contructionNature === "Second-hand property"
+              questions.contructionNature === "Second Hand Home"
                 ? "radio-container container_malta"
                 : "radio-container"
             }
@@ -530,7 +422,7 @@ function GetStarted(props) {
           <div
             onClick={info2}
             className={
-              questions.contructionNature === "Self-Build"
+              questions.contructionNature === "Self Build"
                 ? "radio-container container_malta"
                 : "radio-container"
             }
@@ -547,12 +439,12 @@ function GetStarted(props) {
             <label for="mortf2b">Self-build</label>
           </div>
         </Col>
-        <Col lg={24} className="col2 mysetting">
+        <Col lg={24} className="col2">
           <p className="heading3">
             How many people do you want named on the mortgage?
           </p>
         </Col>
-        <Col lg={24} className="note-col mysetting">
+        <Col lg={24} className="note-col">
           <p className="heading2">
             It's ok if the person you're applying with doesn't have an income,
             they can still ba named on your mortgage. choose option "Two" if
@@ -605,117 +497,80 @@ function GetStarted(props) {
               <p className="input-lbl">
                 What is the First name of Second Applicant ?
               </p>
-              <div className="mysetting">
-                <input
-                  type="text"
-                  className={questions.firstNameSecondApplicant ? "ifExit" : ""}
-                  value={questions.firstNameSecondApplicant}
-                  onChange={handleinput}
-                  name="firstNameSecondApplicant"
-
-                  placeholder="First Name"
-                />
-                {firstNameSecondApplicantEmpty && (
-                  <span>* This field cannot be empty</span>
-                )}
-              </div>
+              <input
+                type="text"
+                className={questions.firstNameSecondApplicant ? "ifExit" : ""}
+                value={questions.firstNameSecondApplicant}
+                onChange={handleinput}
+                name="firstNameSecondApplicant"
+                placeholder="First Name"
+              />
             </div>
             <div className="input">
               <p className="input-lbl">
                 What is the Surname of Second Applicant ?
               </p>
-              <div className="mysetting">
-                <input
-                  type="text"
-                  // className="ifExit"
-                  className={questions.lastNameSecondApplicant ? "ifExit" : ""}
-                  value={questions.lastNameSecondApplicant}
-                  onChange={handleinput}
-                  name="lastNameSecondApplicant"
-                  placeholder="Surname"
-                />
-                {lastNameSecondApplicantEmpty && (
-                  <span>* This field cannot be empty</span>
-                )}
-              </div>
+              <input
+                type="text"
+                // className="ifExit"
+                className={questions.lastNameSecondApplicant ? "ifExit" : ""}
+                value={questions.lastNameSecondApplicant}
+                onChange={handleinput}
+                name="lastNameSecondApplicant"
+                placeholder="Surname"
+              />
             </div>
             <div className="input">
               <p className="input-lbl">
-                What is their email? We'll invite them to fill out this
-                application with you as we need their details also.
+                What is their email? We'll invite them to fill out this application with you as we need their details also.
               </p>
-              <div className="mysetting">
-                <input
-                  type="email"
-                  className={
-                    questions.emailSecondApplicant &&
+              <input
+                type="email"
+                className={
+                  questions.emailSecondApplicant &&
                     questions.emailSecondApplicantValidation
-                      ? "ifExit"
-                      : ""
-                  }
-                  // value={questions.emailSecondApplicant}
-                  onChange={handleinput}
-                  name="emailSecondApplicant"
-                  value={questions.emailSecondApplicant}
-                  placeholder="Co-applicant@example.com"
-                />
-                {emailSecondApplicantEmpty && (
-                  <span>* This field cannot be empty</span>
-                )}
-                
-                {!emailSecondApplicantValidation && (
-                  <span>* You email is not valid</span>
-                )}
-              </div>
+                    ? "ifExit"
+                    : ""
+                }
+                // value={questions.emailSecondApplicant}
+                onChange={handleinput}
+                name="emailSecondApplicant"
+                placeholder="Co-applicant@example.com"
+              />
             </div>
             <div className="input">
               <p className="input-lbl">Type it one more time.</p>
-            </div>
-            <div className="mysetting input">
               <input
                 className={questions.emailSecondApplicantre ? "ifExit" : ""}
                 type="email"
-                value={questions.emailSecondApplicantre}
+                // value={questions.emailSecondApplicantre}
                 onChange={handleinput}
                 name="emailSecondApplicantre"
                 placeholder="Co-applicant@example.com"
               />
-              {emailSecondApplicantreEmpty && (
-                <span>* This field cannot be empty</span>
-              )}
-              {!emailSecondApplicantreValidation && (
-                  <span>* You email is not match</span>
-                )}
             </div>
             <div className="input">
               <p className="input-lbl">what's their Phone Number?</p>
-              <div className="mysetting">
-                <input
-                  type="text"
-                  className={
-                    questions.phoneSecondApplicant &&
+              <input
+                type="text"
+                className={
+                  questions.phoneSecondApplicant &&
                     questions.phoneSecondApplicantIsValid
-                      ? "ifExit"
-                      : ""
-                  }
-                  value={questions.phoneSecondApplicant}
-                  onChange={handleinput}
-                  name="phoneSecondApplicant"
-                  placeholder=" ###########"
-                />
-                {phoneSecondApplicantEmpty && (
-                  <span>* This field cannot be empty</span>
-                )}
-              </div>
+                    ? "ifExit"
+                    : ""
+                }
+                // value={questions.phoneSecondApplicant}
+                onChange={handleinput}
+                name="phoneSecondApplicant"
+                placeholder=" ###########"
+              />
             </div>
           </Col>
         )}
-        <Col className="questionme123 ">
-          {/* <div className="mysetting"> */}
+        <Col className="questionme123">
           <h6 className="heading2">
             In the last 6 years, have you or anyone you're applying with
           </h6>
-          {/* </div> */}
           <ul className="q1-ul">
             <li>1). filled for bankruptcy</li>
             <li>2). been issued a county court judgement (CCJ)</li>
@@ -724,9 +579,6 @@ function GetStarted(props) {
             <li>5). entered into a Debt Sattlement Arrangement (DSA)</li>
             <li>6). entered into a Personal Insolvancy Arrangement (PIA)?</li>
           </ul>
-          {filedBankruptcyEmpty && (
-            <span className="errormissting">* This field cannot be empty</span>
-          )}
         </Col>
         <Col lg={24} className="q1">
           <div
@@ -768,13 +620,12 @@ function GetStarted(props) {
             <label for="no">No</label>
           </div>
         </Col>
-        <Col lg={24} className="col2 mysetting">
+        <Col lg={24} className="col2">
           <p className="heading3">
             In the past two years, have you or anyone you're applying with
             failed to pay a loan or a bill (like utility bills, credit cards or
             personal loans) for more than 3 months in a row?
           </p>
-          {failedToPayLoanEmpty && <span>* This field cannot be empty</span>}
         </Col>
         <Col lg={24} className="q1">
           <div
@@ -822,6 +673,24 @@ function GetStarted(props) {
               onClick={onsubmitForm}
               className="btn2"
               loading={props.financial_data.loading}
+              disabled={
+                (questions.filedBankruptcy &&
+                  questions.failedToPayLoan &&
+                  questions.purposeOfMortgage &&
+                  questions.contructionNature &&
+                  questions.peopleOnMortgage === "one") ||
+                  (questions.filedBankruptcy &&
+                    questions.failedToPayLoan &&
+                    questions.purposeOfMortgage &&
+                    questions.peopleOnMortgage === "two" &&
+                    questions.firstNameSecondApplicant &&
+                    questions.phoneSecondApplicantIsValid &&
+                    questions.lastNameSecondApplicant &&
+                    questions.emailSecondApplicantValidation &&
+                    questions.emailSecondApplicantreValidation)
+                  ? false
+                  : true
+              }
             >
               Save & Countinue
             </Button>
@@ -879,84 +748,4 @@ export default connect(
   <label for="no1">No</label>
 </div>
 </Col> */
-  // const formValidate = () => {
-  //   debugger;
-  //   const {
-  //     filedBankruptcy,
-  //     failedToPayLoan,
-  //     purposeOfMortgage,
-  //     peopleOnMortgage,
-  //     firstNameSecondApplicant,
-  //     lastNameSecondApplicant,
-  //     emailSecondApplicant,
-  //     contructionNature,
-  //     phoneSecondApplicant,
-  //     emailSecondApplicantre
-  //   } = questions;
-  //   if (!filedBankruptcy) {
-  //     setQuestions({
-  //       ...questions,
-  //       filedBankruptcyEmpty: true,
-  //       overAllFormValidate: false
-  //     });
-  //   }
-  //   if (!failedToPayLoan) {
-  //     setQuestions({
-  //       ...questions,
-  //       failedToPayLoanEmpty: true,
-  //       overAllFormValidate: false
-  //     });
-  //   }
-  //   if (!purposeOfMortgage) {
-  //     setQuestions({
-  //       ...questions,
-  //       purposeOfMortgageEmpty: true,
-  //       overAllFormValidate: false
-  //     });
-  //   }
-  //   if (!contructionNature) {
-  //     setQuestions({
-  //       ...questions,
-  //       contructionNatureEmpty: true,
-  //       overAllFormValidate: false
-  //     });
-  //   }
-  //   if (peopleOnMortgage === "two") {
-  //     if (!firstNameSecondApplicant) {
-  //       setQuestions({
-  //         ...setQuestions,
-  //         firstNameSecondApplicantEmpty: true,
-  //         overAllFormValidate: false
-  //       });
-  //     }
-  //     if (!lastNameSecondApplicant) {
-  //       setQuestions({
-  //         ...setQuestions,
-  //         lastNameSecondApplicantEmpty: true,
-  //         overAllFormValidate: false
-  //       });
-  //     }
-  //     if (!emailSecondApplicant) {
-  //       setQuestions({
-  //         ...setQuestions,
-  //         emailSecondApplicantEmpty: true,
-  //         overAllFormValidate: false
-  //       });
-  //     }
-  //     if (!emailSecondApplicantre) {
-  //       setQuestions({
-  //         ...setQuestions,
-  //         emailSecondApplicantreEmpty: true,
-  //         overAllFormValidate: false
-  //       });
-  //     }
-  //     if (!phoneSecondApplicant) {
-  //       setQuestions({
-  //         ...setQuestions,
-  //         phoneSecondApplicantEmpty: true,
-  //         overAllFormValidate: false
-  //       });
-  //     }
-  //   }
-  // };
 }

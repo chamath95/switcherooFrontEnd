@@ -5,6 +5,38 @@ import { Row, Col, Select, Button, DatePicker } from "antd";
 import moment from "moment";
 const { Option } = Select;
 class UserForm extends Component {
+  state = {
+    q4: false,
+    questions: {
+      maritalStatus: ""
+    }
+  };
+  // const [q4, setQ4] = useState(false);
+  clickRadio = e => {
+    var label = e.target.childNodes[1];
+    if (label) {
+      label.click();
+    }
+  };
+  handleQ = e => {
+    var radioContainers = e.target.parentNode.parentNode.childNodes;
+    var questions = this.state.questions;
+    questions[e.target.name] = e.target.value;
+    // setQ4(!q4);
+    this.setState({ questions });
+    // validateRadio(e.target.name, e.target.value);
+    for (var i = 0; i < radioContainers.length; i++) {
+      var input = radioContainers[i].childNodes[0];
+      if (input.checked) {
+        input.parentNode.style.background = "#fb9500";
+        input.parentNode.style.border = "2px solid #fb9500";
+      } else {
+        input.parentNode.style.background = "lightgray";
+        input.parentNode.style.border = "2px solid gray";
+      }
+    }
+  };
+
   render() {
     const {
       maritalStatus,
@@ -13,111 +45,108 @@ class UserForm extends Component {
       childrenFinanciallyDependent,
       childrenFinanciallyDependentOptions,
       publicOrPrivateSector,
-      selfEmployedOrPayeEmpty,
-      publicOrPrivateSectorEmpty,
-      maritalStatusEmpty,
-      dateOfBirthEmpty,
-      childrenFinanciallyDependentEmpty,
+      selfEmployedOrPayeOptions,
+
       dateOfBirth
     } = this.props.allState;
     return (
       <div className="fo_1_con user_form1">
         <Row className="fh-row-gs">
-          <Col lg={24} className="col2 mysetting">
+          <Col lg={24} className="col2">
             <p className="heading3">What is your marital status?</p>
-            {maritalStatusEmpty && (
-              <span className="errormissting">
-                * This field cannot be empty
-              </span>
-            )}
           </Col>
           <Col lg={24} className="q1 q3">
             <div
-              className={
-                maritalStatus === "Single"
-                  ? "radio-container container_malta"
-                  : "radio-container"
-              }
+              onClick={e => this.clickRadio(e)}
+              className="radio-container"
+              // className={
+              //   questions.contructionNature ===
+              //   "Looking For Investment Property"
+              //     ? "radio-container container_malta"
+              //     : "radio-container"
+              // }
             >
               <input
+                onChange={e => this.handleQ(e)}
                 type="radio"
                 name="maritalStatus"
                 id="marital1"
-                onChange={this.props.thisObject.handleRedioBtn}
-                checked={maritalStatus === "Single"}
+                className=""
+                // checked={
+                //   questions.contructionNature ===
+                //   "Looking For Investment Property"
+                // }
                 value="Single"
               />
               <label for="marital1">Single</label>
             </div>
             <div
-              className={
-                maritalStatus === "Married"
-                  ? "radio-container container_malta"
-                  : "radio-container"
-              }
+              onClick={this.clickRadio}
+              className="radio-container"
+              // className={
+              //   questions.contructionNature === "Second Hand Home"
+              //     ? "radio-container container_malta"
+              //     : "radio-container"
+              // }
             >
               <input
+                onChange={e => this.handleQ(e)}
                 type="radio"
                 name="maritalStatus"
                 id="marital2"
-                onChange={this.props.thisObject.handleRedioBtn}
-                checked={maritalStatus === "Married"}
+                // checked={questions.contructionNature === "Second Hand Home"}
                 className=""
                 value="Married"
               />
               <label for="marital2">Married</label>
             </div>
             <div
-              className={
-                maritalStatus === "Widowed"
-                  ? "radio-container container_malta"
-                  : "radio-container"
-              }
+              onClick={this.clickRadio}
+              className="radio-container"
+              // className={
+              //   questions.contructionNature === "Self Build"
+              //     ? "radio-container container_malta"
+              //     : "radio-container"
+              // }
             >
               <input
+                onChange={e => this.handleQ(e)}
                 type="radio"
                 name="maritalStatus"
                 id="marital3"
-                onChange={this.props.thisObject.handleRedioBtn}
-                checked={maritalStatus === "Widowed"}
+                // checked={questions.contructionNature === "Self Build"}
                 className=""
                 value="Widowed"
               />
               <label for="marital3">Widowed</label>
             </div>
           </Col>
-
-          <Col lg={24} className="col2 mysetting">
+          {/* <Col lg={24} className="q1">
+            <SelectBoxa
+              valueItem={maritalStatus}
+              optionsItem={maritalStatusOptions}
+              handlebedFunc={this.props.thisObject.handleMerital}
+            />
+          </Col> */}
+          <Col lg={24} className="col2">
             <p className="heading3">What is your date of birth?</p>
-            {dateOfBirthEmpty && (
-              <span className="errormissting">
-                * This field cannot be empty
-              </span>
-            )}
           </Col>
           <Col lg={24} className="q1">
             <div className="datepic">
               <DatePicker
                 className={
-                  dateOfBirth !== ""
-                    ? "radio-container container_malta"
+                  dateOfBirth!==Date.now()? "radio-container container_malta"
                     : "radio-container"
                 }
                 onChange={this.props.thisObject.onChangeDate}
-                defaultValue={moment(dateOfBirth ? dateOfBirth : Date.now())}
-                // placeholder="Please Select "
+                defaultValue={moment(dateOfBirth)}
               />
             </div>
           </Col>
-          <Col lg={24} className="col2 mysetting">
+          <Col lg={24} className="col2">
             <p className="heading3">
               How many children are financially depand on you?
             </p>
-            {childrenFinanciallyDependentEmpty && (
-              <span className="errormissting">
-                * This field cannot be empty
-              </span>
-            )}
           </Col>
           <Col lg={24} className="q1">
             <SelectBoxa
@@ -126,18 +155,14 @@ class UserForm extends Component {
               handlebedFunc={this.props.thisObject.handleChild}
             />
           </Col>
-          <Col lg={24} className="col2 mysetting">
+          <Col lg={24} className="col2">
             <p className="heading3">
               Do you work in the Public or Private sector?
             </p>
-            {publicOrPrivateSectorEmpty && (
-              <span className="errormissting">
-                * This field cannot be empty
-              </span>
-            )}
           </Col>
           <Col lg={24} className="q1 posstionChange">
             <div
+              onClick={e => this.props.thisObject.clickRadio(e)}
               className={
                 publicOrPrivateSector === "Private Sector"
                   ? "radio-container container_malta"
@@ -145,10 +170,10 @@ class UserForm extends Component {
               }
             >
               <input
+                onChange={e => this.props.thisObject.handleQ(e)}
                 type="radio"
                 name="publicOrPrivateSector"
                 id="private"
-                onChange={this.props.thisObject.handleRedioBtn}
                 checked={publicOrPrivateSector === "Private Sector"}
                 className=""
                 value="Private Sector"
@@ -156,6 +181,7 @@ class UserForm extends Component {
               <label for="private">Private</label>
             </div>
             <div
+              onClick={this.props.thisObject.clickRadio}
               className={
                 publicOrPrivateSector === "Public Sector"
                   ? "radio-container container_malta"
@@ -163,9 +189,9 @@ class UserForm extends Component {
               }
             >
               <input
+                onChange={e => this.props.thisObject.handleQ(e)}
                 type="radio"
                 name="publicOrPrivateSector"
-                onChange={this.props.thisObject.handleRedioBtn}
                 id="public"
                 checked={publicOrPrivateSector === "Public Sector"}
                 className=""
@@ -174,52 +200,54 @@ class UserForm extends Component {
               <label for="public">Public</label>
             </div>
           </Col>
-          <div style={{ clear: "both" }}></div>
-          <Col lg={24} className="col2 mysetting">
-            <p className="heading3">
-              Are you a PAYE employee or Self Employed?
-            </p>
-            {selfEmployedOrPayeEmpty && (
-              <span className="errormissting">
-                * This field cannot be empty
-              </span>
-            )}
+          <div style={{clear:"both"}}></div>
+          <Col lg={24} className="col2">
+            <p className="heading3">Are you a PAYE employee or Self Employed?</p>
           </Col>
-
+          {/* <Col lg={24} className="q1">
+            <SelectBoxa
+              valueItem={selfEmployedOrPaye}
+              optionsItem={selfEmployedOrPayeOptions}
+              handlebedFunc={this.props.thisObject.handleWork}
+            />
+          </Col> */}
           <Col lg={24} className="q1">
             <div
+              onClick={e => this.clickRadio(e)}
               className="radio-container"
-              className={
-                selfEmployedOrPaye === "Self Employed"
-                  ? "radio-container container_malta"
-                  : "radio-container"
-              }
+
+              // className={
+              //   publicOrPrivateSector === "Private Sector"
+              //     ? "radio-container container_malta"
+              //     : "radio-container"
+              // }
             >
               <input
+                onChange={e => this.handleQ(e)}
                 type="radio"
-                onChange={this.props.thisObject.handleRedioBtn}
-                name="selfEmployedOrPaye"
+                name="incomType"
                 id="incomType1"
-                checked={selfEmployedOrPaye === "Self Employed"}
+                // checked={publicOrPrivateSector === "Self Employed"}
                 className=""
                 value="Self Employed"
               />
               <label for="incomType1">Self Employed</label>
             </div>
             <div
+              onClick={this.clickRadio}
               className="radio-container"
-              className={
-                selfEmployedOrPaye === "PAYE"
-                  ? "radio-container container_malta"
-                  : "radio-container"
-              }
+              // className={
+              //   publicOrPrivateSector === "Public Sector"
+              //     ? "radio-container container_malta"
+              //     : "radio-container"
+              // }
             >
               <input
+                onChange={e => this.handleQ(e)}
                 type="radio"
-                name="selfEmployedOrPaye"
-                onChange={this.props.thisObject.handleRedioBtn}
+                name="incomType"
                 id="incomType2"
-                checked={selfEmployedOrPaye === "PAYE"}
+                // checked={publicOrPrivateSector === "PAYE"}
                 className=""
                 value="PAYE"
               />
@@ -236,6 +264,14 @@ class UserForm extends Component {
               </button>
               <Button
                 onClick={this.props.thisObject.onsubmitForm}
+                disabled={
+                  maritalStatus &&
+                  selfEmployedOrPaye &&
+                  childrenFinanciallyDependent &&
+                  publicOrPrivateSector
+                    ? false
+                    : true
+                }
                 className="btn2"
               >
                 Save & Countinue

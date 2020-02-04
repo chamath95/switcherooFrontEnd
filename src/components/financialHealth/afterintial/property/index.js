@@ -11,24 +11,15 @@ class Property extends React.Component {
   state = {
     userId: "",
     typeOfProperty: "",
-    typeOfPropertyV: false,
-
-    typeOfPropertyValidation: "", 
-    typeOfPropertyValidationV: false,
-
+    typeOfPropertyValidation: "",
     typeOfPropertyHelp: "",
-    typeOfPropertyHelpV: false,
     typeOfPropertyValidationStatus: "error",
 
-    howManyBedrooms: "",
-    howManyBedroomsV: false,
+    howManyBedrooms: 1,
     howManyBedroomsOption: [1, 2, 3, 4, 5, "5+"],
 
     valueOfProperty: "",
-    valueOfPropertyV: false,
-
     propertyLocation: "",
-    propertyLocationV: false,
     propertyLocationOption: ["Carlow", "Cavan", "Clare", "Cork City",
       "Cork County", "Denegal", "Dublin 1",
       "Dublin 2", "Dublin 3", "Dublin 4", "Dublin 5",
@@ -41,12 +32,8 @@ class Property extends React.Component {
       "Leitrim City", "Limerick Country", "Longford", "Louth",
       "Mayo", "Meath", "Monaghan", "Offaly", "Roscommon", "Sligo",
       "Tipperary", "Waterford City", "Waterford Country", "Westmeath", "Wexford", "Wicklow"],
-
     sizeOfMortgage: undefined,
-    sizeOfMortgageV: false,
-
-    yearsToPayOffMortgage: undefined,
-    yearsToPayOffMortgageV: false,
+    yearsToPayOffMortgage: undefined
   };
   clickRadio(e) {
     var label = e.target.childNodes[1];
@@ -151,16 +138,7 @@ class Property extends React.Component {
       }
     }
   };
-
   onsubmitForm = () => {
-    this.state.typeOfProperty === "" ? this.setState({typeOfPropertyV : true}) :  this.setState({typeOfPropertyV : false});
-    this.state.howManyBedrooms === "" ? this.setState({howManyBedroomsV : true}) :  this.setState({howManyBedroomsV : false});
-
-    this.state.valueOfProperty === "" ? this.setState({valueOfPropertyV : true}) :  this.setState({valueOfPropertyV : false})
-    this.state.propertyLocation === "" ? this.setState({propertyLocationV : true}) :  this.setState({propertyLocationV : false})
-    this.state.sizeOfMortgage === undefined ? this.setState({sizeOfMortgageV : true}) :  this.setState({sizeOfMortgageV : false})
-    this.state.yearsToPayOffMortgage === undefined ? this.setState({yearsToPayOffMortgageV : true}) :  this.setState({yearsToPayOffMortgageV : false})
-
     let {
       typeOfProperty,
       howManyBedrooms,
@@ -192,11 +170,7 @@ class Property extends React.Component {
     );
   };
   callbackFunc = () => {
-    if(this.state.typeOfPropertyV ===  true || this.state.howManyBedroomsV ===  true || this.state.valueOfPropertyV ===  true || this.state.propertyLocationV ===  true ||  this.state.sizeOfMortgageV===  true ||  this.state.yearsToPayOffMortgageV ===  true ){
-      return this.props.changeProfRout(1);
-    }else{
-     return this.props.changeProfRout(2);
-    }    
+    this.props.changeProfRout(2);
   };
   render() {
     const {
@@ -218,7 +192,6 @@ class Property extends React.Component {
         <Row className="fh-row-gs">
           <Col lg="24" className="col2">
             <p className="heading3">What type of property?</p>
-            {this.state.typeOfPropertyV === true ? <span className="p-error-v">* This field cannot be empty</span> : null}
           </Col>
           <Col lg={24} className="q1">
             <div
@@ -262,8 +235,6 @@ class Property extends React.Component {
           </Col>
           <Col lg={24} className="col2">
             <p className="heading3">How many bedrooms?</p>
-            {this.state.howManyBedroomsV === true ? <span className="p-error-v">* This field cannot be empty</span> : null}
-
           </Col>
           <Col lg={24} className="q1">
             <Select
@@ -285,18 +256,15 @@ class Property extends React.Component {
             </Select>
           </Col>
           <Col lg={24} className="col3" style={{ position: "relative" }}>
+            <span className="eruo"> &euro; </span>
             <p className="heading3">What is the value of Property?</p>
-            {this.state.valueOfPropertyV === true ? <span className="p-error-v">* This field cannot be empty</span> : null}
-
-             
-            <span style={{color:"white"}} className="eruo"> &euro; </span>
           </Col>
           <Col lg={24} className="q1 q3">
             <div
-              className={this.state.valueOfProperty !== "" ? "input maltaback" : "input"}
+              className={valueOfProperty !== "" ? "input maltaback" : "input"}
             >
               <input
-                type="number"
+                type="text"
                 name="valueOfProperty"
                 onChange={this.onchangeInput}
                 value={valueOfProperty}
@@ -306,8 +274,6 @@ class Property extends React.Component {
           </Col>
           <Col lg={24} className="col2">
             <p className="heading3">Where it is located?</p>
-            {this.state.propertyLocationV === true ? <span className="p-error-v">* This field cannot be empty</span> : null}
-
           </Col>
           <Col lg={24} className="q1">
             <Select
@@ -334,15 +300,13 @@ class Property extends React.Component {
             <p className="heading3">
               What is the size of mortgage are you looking for?
             </p>
-            {this.state.sizeOfMortgageV === true ? <span className="p-error-v">* This field cannot be empty</span> : null}
-            
           </Col>
           <Col lg={24} className="q1 q3">
             <div
               className={sizeOfMortgage !== undefined ? "input maltaback" : "input"}
             >
               <input
-                type="number"
+                type="text"
                 name="sizeOfMortgage"
                 onChange={this.onchangeInput}
                 defaultValue={sizeOfMortgage}
@@ -354,9 +318,6 @@ class Property extends React.Component {
             <p className="heading3">
               How many years do you want to pay off your mortgage?
             </p>
-            {this.state.yearsToPayOffMortgageV === true ? <span className="p-error-v">* This field cannot be empty</span> : null}
-
-            
           </Col>
           <Col lg={24} className="q1">
             <Select
@@ -392,14 +353,14 @@ class Property extends React.Component {
               <Button
                 onClick={this.onsubmitForm}
                 loading={this.props.financial_data.loading}
-                // disabled={
-                //   typeOfProperty &&
-                //     valueOfProperty &&
-                //     sizeOfMortgage &&
-                //     yearsToPayOffMortgage
-                //     ? false
-                //     : true
-                // }
+                disabled={
+                  typeOfProperty &&
+                    valueOfProperty &&
+                    sizeOfMortgage &&
+                    yearsToPayOffMortgage
+                    ? false
+                    : true
+                }
                 className="btn2"
               >
                 Save & Countinue

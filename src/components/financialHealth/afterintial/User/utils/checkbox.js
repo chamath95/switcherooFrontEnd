@@ -6,21 +6,10 @@ const FormCheckbox = props => {
   return (
     <div className="form_checkbox">
       <div className="input">
-        <div style={{ display: "flex" }}>
-          <p className="input-lbl">{props.children}</p>
-          {props.itemName[3] && (
-            <span className="errormissting">* This field cannot be empty</span>
-          )}
-        </div>
-        <p
-          className={
-            props.itemName[2] || props.itemName[3]
-              ? "EruoSymbleDisableClass"
-              : "EruoSymbleanableClass"
-          }
-        >
-          &euro;
-        </p>
+        <p className="input-lbl">{props.children}</p>
+        <p 
+         className={props.itemName[2] ? "EruoSymbleDisableClass" : "EruoSymbleanableClass"}
+        >&euro;</p>        
 
         <input
           type="text"
@@ -28,20 +17,13 @@ const FormCheckbox = props => {
           name={props.itemName[0]}
           value={props.itemName[1]}
           onChange={props.onChangeTextSecond}
-          className={
-            props.itemName[2]
-              ? "DisableClass"
-              : props.itemName[3]
-              ? "missingtext"
-              : "anableClass"
-          }
+          className={props.itemName[2] ? "DisableClass" : "anableClass"}
           placeholder="0"
         />
 
         <Checkbox
           className="checkbox"
           name={props.itemName[0]}
-          checked={props.itemName[2] === true}
           onChange={props.onChangefunc}
         >
           {" "}

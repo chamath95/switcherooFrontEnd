@@ -18,13 +18,15 @@ import rightIcon from "../../assets/Icon ionic-md-arrow-round-forward.png";
 import CutLogo from "../../assets/cut_log.png";
 import moment from "moment";
 import styled from "styled-components";
-import Chatbubble from "./ChatBubble";
+import Chatbubble, { purge } from "./ChatBubble";
 import api from "../../redux/api";
 import { connect } from "react-redux";
+import dummy from "./dummy";
 const { Panel } = Collapse;
 
 const { Header, Content, Footer } = Layout;
-const TIME_INCREMENT = 2000;
+const TIME_INCREMENT = 4000;
+const EXPERT_WAIT_TIME = 2500;
 
 class ExpertChat extends Component {
   constructor(props) {
@@ -41,6 +43,7 @@ class ExpertChat extends Component {
   state = {
     isLoading: true,
     possibleResponse: [],
+    // chats: dummy,
     chats: []
   };
   scrollToBottom = () => {
@@ -91,7 +94,6 @@ class ExpertChat extends Component {
     const { dispatch } = this.props;
     const { isLoading, chats } = this.state;
     const setResponse = this.setResponse;
-
     return (
       <>
         <Col lg={18}>
@@ -102,8 +104,8 @@ class ExpertChat extends Component {
                 display: "flex",
                 flex: 1,
                 height: "auto",
-                maxHeight: "80vh",
-                minHeight: "80vh",
+                maxHeight: "90vh",
+                minHeight: "90vh",
                 flexDirection: "column"
               }}
             >
@@ -173,13 +175,13 @@ class ExpertChat extends Component {
                     this.messagesEnd = el;
                   }}
                 ></div>
-                {isLoading && <strong>Expert typing...</strong>}
+                {isLoading && <strong>expert typing...</strong>}
               </div>
               <div
                 className="actions-part"
                 style={{
                   justifySelf: "flex-end",
-                  height: "50px",
+                  height: "auto",
                   borderTop: "1px solid #707070",
                   display: "flex",
                   alignItems: "center",
@@ -198,6 +200,11 @@ class ExpertChat extends Component {
                     if (dropdown) {
                       const menu = (
                         <Menu
+                          style={{
+                            background: "#fb9500",
+                            // border: "none",
+                            color: "white"
+                          }}
                           onClick={async ({
                             item: {
                               props: { children }
@@ -216,27 +223,28 @@ class ExpertChat extends Component {
                             ];
 
                             this.setChat(newChat);
+                            this.setLoading(true);
                             await this.scrollToBottom();
                             this.clearResponse();
-                            this.setLoading(true);
                             const token = localStorage.getItem("tokenas");
                             this.scrollToBottom();
-
-                            await api.post(
-                              "/api/expertChat/getResponse",
-                              { _id },
-                              token,
-                              dispatch,
-                              (err, res) => {
-                                if (!err) {
-                                  const chat = res;
-                                  let waitTime = 0;
-                                  this.scrollToBottom();
-                                  this.getResponse(chat);
+                            setTimeout(async () => {
+                              api.post(
+                                "/api/expertChat/getResponse",
+                                { _id },
+                                token,
+                                dispatch,
+                                (err, res) => {
+                                  if (!err) {
+                                    const chat = res;
+                                    let waitTime = 0;
+                                    this.scrollToBottom();
+                                    this.getResponse(chat);
+                                  }
+                                  console.log(res, err);
                                 }
-                                console.log(res, err);
-                              }
-                            );
+                              );
+                            }, EXPERT_WAIT_TIME);
                           }}
                         >
                           {Array.from(new Array(dropdown)).map((n, i) => (
@@ -263,7 +271,11 @@ class ExpertChat extends Component {
                         >
                           <Dropdown placement={"topCenter"} overlay={menu}>
                             <Button
-                              style={{ background: "#fb9500", border: "none" }}
+                              style={{
+                                background: "#fb9500",
+                                border: "none",
+                                color: "white"
+                              }}
                             >
                               Choose... <Icon type="up" />
                             </Button>
@@ -284,6 +296,7 @@ class ExpertChat extends Component {
                           margin: "0px 5px",
                           cursor: "pointer",
                           minWidth: "100px"
+                          // maxHeight: "40px"
                         }}
                         onClick={async () => {
                           const { setChat, setLoading, setResponse } = this;
@@ -305,26 +318,26 @@ class ExpertChat extends Component {
                           this.setLoading(true);
                           const token = localStorage.getItem("tokenas");
                           this.scrollToBottom();
-
-                          await api.post(
-                            "/api/expertChat/getResponse",
-                            { _id },
-                            token,
-                            dispatch,
-                            (err, res) => {
-                              if (!err) {
-                                const chat = res;
-                                let waitTime = 0;
-                                this.scrollToBottom();
-                                this.getResponse(chat);
+                          setTimeout(async () => {
+                            await api.post(
+                              "/api/expertChat/getResponse",
+                              { _id },
+                              token,
+                              dispatch,
+                              (err, res) => {
+                                if (!err) {
+                                  const chat = res;
+                                  let waitTime = 0;
+                                  this.scrollToBottom();
+                                  this.getResponse(chat);
+                                }
+                                console.log(res, err);
                               }
-                              console.log(res, err);
-                            }
-                          );
+                            );
+                          }, EXPERT_WAIT_TIME);
                         }}
-                      >
-                        {response}
-                      </div>
+                        dangerouslySetInnerHTML={{ __html: purge(response) }}
+                      ></div>
                     );
                   }
                 )}

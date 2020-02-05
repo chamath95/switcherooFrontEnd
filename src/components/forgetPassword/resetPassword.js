@@ -1,32 +1,47 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "antd/dist/antd.css";
-import './style.css';
+import "./style.css";
 import { Link } from "react-router-dom";
 import { Row, Col, Form, Icon, Input, Button, Checkbox } from "antd";
 import logo from "../../assets/Icon-Prototype-Screens (3)/icons/logo.png";
-function ResetPassword(props) {
-  const [formData, setFormData] = useState({
-    newPassword: "",
-    conformPassword: ""
-  });
-  const { newPassword, conformPassword } = formData;
-  const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import { resetpassword } from "../../redux/Thunk/authThunk/index";
+import { useFormik } from "formik";
+const validate = values => {
+  const errors = {};
+  if (!values.newPassword) errors.newPassword = "Password Required";
+  else if (values.newPassword.length < 6)
+    errors.newPassword = "Password must be atleast 6 characters";
 
-  const handleSubmit = e => {
-    console.log(formData);
-    e.preventDefault();
-    // props.form.validateFieldsAndScroll((err, values) => {
-    //   if (!err) {
-    //     console.log("Received values of form: ", values);
-    //   }
-    // });
+  if (values.confirmPassword != values.newPassword)
+    errors.confirmPassword = "Password does not matched";
+  return errors;
+};
+function ResetPassword(props) {
+  const handleSubmit = values => {
+    // e.preventDefault();
+
+    props.newPassword(values, props);
+    console.log(values);
   };
+  const formik = useFormik({
+    initialValues: {
+      newPassword: "",
+      confirmPassword: ""
+    },
+    validate,
+    onSubmit: handleSubmit
+  });
+  const { newPassword, confirmPassword } = formik.values;
+  // const handleChange = e => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
+
   return (
-    <div className="page-container forgerPassword page">
-      <Row type="flex" justify="center" className="inner-Container">
-        <Row className="innnerContainer">
+    <div className="page-container forgerPassword page Reset">
+      <Row type="flex" justify="center" className="inner-Container ResetPassword">
+        <Row className="innnerContainer innerReset">
           <Col span={24} className="logoStyle">
             <img className="img" src={logo} />
           </Col>
@@ -37,31 +52,63 @@ function ResetPassword(props) {
           <br />
           <Col span={24}>
             <Row type="flex" justify="center">
-              <Form onSubmit={handleSubmit}>
+              <Form className="resetMyform" onSubmit={formik.handleSubmit}>
                 <Col span={24}>
                   <Input
+                    type="password"
                     placeholder="new password"
                     // className="inputStyle"
                     name="newPassword"
                     value={newPassword}
-                    onChange={e => handleChange(e)}
-                    prefix={<Icon type="mail" style={{color: 'white' , fontWeight:'bold',textIndent:'10px', fontSize:'15px' }} />}
+                    onChange={formik.handleChange}
+                    prefix={
+                      <Icon
+                        type="mail"
+                        style={{
+                          color: "white",
+                          fontWeight: "bold",
+                          textIndent: "10px",
+                          fontSize: "15px"
+                        }}
+                      />
+                    }
                   />
+                  {formik.errors.newPassword ? (
+                    <div>{formik.errors.newPassword}</div>
+                  ) : null}
                 </Col>
-                <br/><br/>
+                <br />
+                <br />
                 <Col span={24}>
                   <Input
+                    type="password"
                     placeholder="Conform password"
                     // className="inputStyle"
-                    name="conformPassword"
-                    value={conformPassword}
-                    onChange={e => handleChange(e)}
-                    prefix={<Icon type="mail" style={{ color: 'white' , fontWeight:'bold',textIndent:'10px', fontSize:'15px' }} />}
+                    name="confirmPassword"
+                    value={confirmPassword}
+                    onChange={formik.handleChange}
+                    prefix={
+                      <Icon
+                        type="mail"
+                        style={{
+                          color: "white",
+                          fontWeight: "bold",
+                          textIndent: "10px",
+                          fontSize: "15px"
+                        }}
+                      />
+                    }
                   />
+                  {formik.errors.confirmPassword ? (
+                    <div>{formik.errors.confirmPassword}</div>
+                  ) : null}
                 </Col>
-
                 <Col span={22}>
-                  <Button onClick={handleSubmit} className="handelButtonRegisterStyle">
+                  <Button
+                    disabled={ !newPassword || !confirmPassword  }
+                    onClick={formik.handleSubmit}
+                    className="handelButtonRegisterStyle "
+                  >
                     Reset password
                   </Button>
                 </Col>
@@ -73,4 +120,13 @@ function ResetPassword(props) {
     </div>
   );
 }
-export default ResetPassword;
+const mapDispatchToProps = Dispatch => ({
+  newPassword: (state, props) => Dispatch(resetpassword(state, props))
+});
+const mapStateToProps = state => ({
+  UserState: state.userReducer
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(ResetPassword));

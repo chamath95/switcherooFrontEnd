@@ -1,35 +1,40 @@
 import React, { useState } from "react";
 import "antd/dist/antd.css";
 import "./style.css";
-import { Link } from "react-router-dom";
+import { Link ,useLocation,useHistory} from "react-router-dom";
 import { Row, Col, Form, Icon, Input, Button, Checkbox } from "antd";
 import logo from "../../assets/Icon-Prototype-Screens (3)/icons/logo.png";
-import { Formik } from "formik";
-const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+import {connect} from "react-redux";
+import {recover} from "../../redux/Thunk/authThunk/index"
 
-function PasswordRestVerification(props) {
+
+const PasswordResetVerificaition=(props)=> {
   const [formData, setFormData] = useState({
-    newPassword: "",
-    conformPassword: ""
+    disabled:false,
+    disabledText:"Try Again In ",
+    retryTime:60
   });
-  const { newPassword, conformPassword } = formData;
-  const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = e => {
-    console.log(formData);
     e.preventDefault();
-    // props.form.validateFieldsAndScroll((err, values) => {
-    //   if (!err) {
-    //     console.log("Received values of form: ", values);
-    //   }
-    // });
+    props.recoverPassword(props.UserState.resetPasswordEmail,null)
+    setFormData({...formData,disabled:true})
+    const counter=setInterval(()=>{
+      if(formData.retryTime==0)
+      {
+        setFormData({...formData,disabled:false,retryTime:60});
+        clearInterval(counter)
+      }
+      else
+      setFormData({...formData,retryTime:formData.retryTime--,disabled:true})
+    },1000)
   };
-
-  return (
-    <>
-      {/* {!props.UserState.user._id? */}
+const {UserState}=props;
+let history = useHistory();
+let location = useLocation();
+let { from } = location.state || { from: { pathname: "/" } };
+console.log("pag",formData.retryTime,formData.disabled)
+  return ( <>
       <div className="page-container login page">
         <div className="Login-Container">
           <Row type="flex" justify="center">
@@ -40,63 +45,51 @@ function PasswordRestVerification(props) {
                 </Col>
 
                 <Col span={24}>
-                  <p>
-                    Forget Password?
+                  <h2 id="account-success">
+                    Password Reset Email Sended
                     <br />
-                    Please Provide us your email to send
-                    <br />
-                    verification email
-                  </p>
+                    Successfully{" "}
+                  </h2>
                 </Col>
                 <br />
                 <Col span={24}>
                   <div className="">
                     <Row type="flex" justify="center">
-                      <Form onSubmit={handleSubmit}>
-                        <Col span={18} id="handel-input">
-                          {" "}
-                          <Form.Item
-                            validateStatus={formData.passwordValidateStatus}
-                            help={formData.emailHelp}
-                          >
-                            <Input
-                              placeholder="email"
-                              // className="inputStyle"
-                              name="newPassword"
-                              value={newPassword}
-                              onChange={e => handleChange(e)}
-                              prefix={
-                                <Icon
-                                  type="mail"
-                                  style={{
-                                    color: "white",
-                                    fontWeight: "bold",
-                                    textIndent: "10px",
-                                    fontSize: "15px"
-                                  }}
-                                />
-                              }
-                            />
-                          </Form.Item>
+                      <Form >
+                        <Col span={24}>
+                          <p>
+                            Please check your email
+                            <br />
+                            {UserState.resetPasswordEmail}
+                            <br />
+                            to reset the password
+                          </p>
+                          <br />
+                          <a id="link-not-send">Not received any email?</a>
                         </Col>
-
-                        <Col span={22}>
+                        <br />
+                        <br />
+                        <Col span={24}>
                           <Button
                             onClick={handleSubmit}
-                            id="handelButtonRegisterStyle"
-                            // disabled={
-                            //   !formData.emailIsValid ||
-                            //   !formData.passwordIsValid
-                            // }
+                            id="handelButtonStyle"
+                            disabled={
+                              formData.disabled
+                            }
+                         style={formData.disabled&&{height:"50px"}||{}}
                           >
-                            <Link to="/registrationSuccessfully">
-                              {" "}
-                              Reset Password
-                            </Link>
+                            Resend
+                            <br/>
+                            {
+                              formData.disabled&&
+                              `(${formData.disabledText}${formData.retryTime})`
+                            }
                           </Button>
-                        </Col>
+                        </Col>{" "}
+                     
                       </Form>
                     </Row>
+
                   </div>
                 </Col>
               </Row>
@@ -104,11 +97,18 @@ function PasswordRestVerification(props) {
           </Row>
         </div>
       </div>
+    
     </>
   );
 }
 
-const WrappedRegistrationForm = Form.create({ name: "register" })(
-  PasswordRestVerification
+const resetPasswordVerification = Form.create({ name: "register" })(
+  PasswordResetVerificaition
 );
-export default WrappedRegistrationForm;
+const mapDispatchToProps = (Dispatch,props) => ({
+  recoverPassword: state => Dispatch(recover(state))
+});
+const mapStateToProps = state => ({
+  UserState: state.userReducer
+});
+export default connect(mapStateToProps,mapDispatchToProps)(resetPasswordVerification);

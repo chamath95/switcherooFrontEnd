@@ -16,7 +16,6 @@ function Signup(props) {
     firstName: "",
     lastName: "",
 
-
     email: "",
     emailIsValid: false,
     emailHelp: "",
@@ -34,16 +33,16 @@ function Signup(props) {
 
     terms: false,
     privacy: false,
-    emailsvalidate:true
+    emailsvalidate: true
   });
 
- const onChangeValidator = (name, value) => {
+  const onChangeValidator = (name, value) => {
     switch (name) {
       case "password":
         if (value.trim() === "" || value.length < 5) {
           setFormData({
             ...formData,
-            [name]:value,
+            [name]: value,
             passwordValidateStatus: "error",
             passwordHelp: "Enter more than 5 digit password!",
             passwordIsValid: false
@@ -51,7 +50,7 @@ function Signup(props) {
         } else {
           setFormData({
             ...formData,
-            [name]:value,
+            [name]: value,
             passwordValidateStatus: "success",
             passwordHelp: "",
             passwordIsValid: true
@@ -62,15 +61,15 @@ function Signup(props) {
         if (!emailPattern.test(value)) {
           setFormData({
             ...formData,
-            [name]:value,
+            [name]: value,
             emailValidateStatus: "error",
             emailHelp: "Enter a valid Email address!",
             emailIsValid: false
           });
         } else {
           setFormData({
-       ...formData,
-            [name]:value,
+            ...formData,
+            [name]: value,
             emailValidateStatus: "success",
             emailHelp: "",
             emailIsValid: true
@@ -78,36 +77,37 @@ function Signup(props) {
         }
         break;
 
-        case "phone":
-          if (!phoneno.test(value)) {
-            setFormData({
-              ...formData,
-              [name]:value,
-              phoneValidateStatus: "error",
+      case "phone":
+        if (!phoneno.test(value)) {
+          setFormData({
+            ...formData,
+            [name]: value,
+            phoneValidateStatus: "error",
             phoneHelp: "Enter a phone Number!",
-              phoneIsValid: false
-            });
-          } else {
-            setFormData({
-         ...formData,
-              [name]:value,
-              phoneValidateStatus: "success",
-              phoneHelp: "",
-              phoneIsValid: true
-            });
-          }
-          break;
+            phoneIsValid: false
+          });
+        } else {
+          setFormData({
+            ...formData,
+            [name]: value,
+            phoneValidateStatus: "success",
+            phoneHelp: "",
+            phoneIsValid: true
+          });
+        }
+        break;
     }
- 
   };
 
-
   const handleChange = e => {
-  
-    if (e.target.name === "email" || e.target.name==="password" || e.target.name==="phone" ) {
-        onChangeValidator(e.target.name, e.target.value)
+    if (
+      e.target.name === "email" ||
+      e.target.name === "password" ||
+      e.target.name === "phone"
+    ) {
+      onChangeValidator(e.target.name, e.target.value);
     } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value })
+      setFormData({ ...formData, [e.target.name]: e.target.value });
     }
   };
   function onChange(e) {
@@ -115,7 +115,6 @@ function Signup(props) {
     console.log(`checked = ${e.target.checked}`);
   }
   const handleSubmit = e => {
-
     e.preventDefault();
     let isFormValid = true;
     if (!formData.emailIsValid) {
@@ -145,11 +144,27 @@ function Signup(props) {
     }
 
     if (isFormValid) {
-      const { email, password,  firstName,  lastName ,phone,terms, privacy  } = formData;
+      const {
+        email,
+        password,
+        firstName,
+        lastName,
+        phone,
+        terms,
+        privacy
+      } = formData;
       props.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           console.log("Received formData of form: ", values);
-          props.SignUp({ email, password,  firstName, phone, lastName ,terms, privacy});
+          props.SignUp({
+            email,
+            password,
+            firstName,
+            phone,
+            lastName,
+            terms,
+            privacy
+          });
         }
       });
     } else {
@@ -161,10 +176,10 @@ function Signup(props) {
   //   return props.history.push("/home")
   // }
   // else {
-     return (
+  return (
     <>
-    {!props.UserState.user._id?
-       <div className="page-container signup page">
+      {!props.UserState.user._id ? (
+        <div className="page-container signup page">
           <div className="Signup-Container">
             <Row type="flex" justify="center">
               <Col span={8}>
@@ -177,182 +192,175 @@ function Signup(props) {
                   </Col>
                   <Col span={24}>
                     <div>
-                   
-                          <Form onSubmit={handleSubmit}>
-                            <Row type="flex" justify="center">
-                              <Col span={8}>
-                                <Input
-                                  placeholder="First name"
-                                  name="firstName"
-                                  value={formData.firstName}
-                                  // onChange={e => handleChange(e)}
-                          
-                                  onChange={handleChange}
-                                  value={formData.firstName}
-                                  prefix={
-                                    <Icon
-                                      type="user"
-                                      style={{
-                                        color: "white",
-                                        fontWeight: "bold",
-                                        textIndent: "10px",
-                                        fontSize: "15px"
-                                      }}
-                                    />
-                                  }
+                      <Form onSubmit={handleSubmit}>
+                        <Row type="flex" justify="center">
+                          <Col span={8}>
+                            <Input
+                              placeholder="First name"
+                              name="firstName"
+                              value={formData.firstName}
+                              // onChange={e => handleChange(e)}
+
+                              onChange={handleChange}
+                              value={formData.firstName}
+                              prefix={
+                                <Icon
+                                  type="user"
+                                  style={{
+                                    color: "white",
+                                    fontWeight: "bold",
+                                    textIndent: "10px",
+                                    fontSize: "15px"
+                                  }}
                                 />
-                               
-                              </Col>
-                              <Col span={8}>
-                                {" "}
-                                <Input
-                                  placeholder="Last name"
-                                  name="lastName"
-                                  value={formData.lastName}
-                                  // onChange={e => handleChange(e)}
-                                  onChange={handleChange}
-                                  value={formData.lastName}
-                                  prefix={
-                                    <Icon
-                                      type="lock"
-                                      style={{
-                                        color: "white",
-                                        fontWeight: "bold",
-                                        textIndent: "10px",
-                                        fontSize: "15px"
-                                      }}
-                                    />
-                                  }
+                              }
+                            />
+                          </Col>
+                          <Col span={8}>
+                            {" "}
+                            <Input
+                              placeholder="Last name"
+                              name="lastName"
+                              value={formData.lastName}
+                              // onChange={e => handleChange(e)}
+                              onChange={handleChange}
+                              value={formData.lastName}
+                              prefix={
+                                <Icon
+                                  type="lock"
+                                  style={{
+                                    color: "white",
+                                    fontWeight: "bold",
+                                    textIndent: "10px",
+                                    fontSize: "15px"
+                                  }}
                                 />
-                               
-                              </Col>
-                              <Col span={16}>
-                                {" "}
-                                <Form.Item
+                              }
+                            />
+                          </Col>
+                          <Col span={16}>
+                            {" "}
+                            <Form.Item
                               validateStatus={formData.emailValidateStatus}
                               help={formData.emailHelp}
                             >
-                                <Input
-                                  placeholder="Email"
-                                  name="email"
-                                  type="email"
-                                  value={formData.email}
-                                  // onChange={e => handleChange(e)}
-                                  onChange={handleChange}
-                                  value={formData.email}
-                          
-                                  prefix={
-                                    <Icon
-                                      type="mail"
-                                      style={{
-                                        color: "white",
-                                        fontWeight: "bold",
-                                        textIndent: "10px",
-                                        fontSize: "15px",
-                                        marginTop:"10px"
-                                      }}
-                                    />
-                                  }
-                                />
-                                  </Form.Item>
-                              </Col>
-                              <Col span={16}>
-                                {" "}
-                                <Form.Item
+                              <Input
+                                placeholder="Email"
+                                name="email"
+                                type="email"
+                                value={formData.email}
+                                // onChange={e => handleChange(e)}
+                                onChange={handleChange}
+                                value={formData.email}
+                                prefix={
+                                  <Icon
+                                    type="mail"
+                                    style={{
+                                      color: "white",
+                                      fontWeight: "bold",
+                                      textIndent: "10px",
+                                      fontSize: "15px",
+                                      marginTop: "10px"
+                                    }}
+                                  />
+                                }
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col span={16}>
+                            {" "}
+                            <Form.Item
                               validateStatus={formData.passwordValidateStatus}
                               help={formData.passwordHelp}
-                             
                             >
-                        
-                                <Input.Password
-                                  placeholder="Password"
-                                  name="password"
-                                  value={formData.password}
-                                  type="password"
-                                  onChange={e => handleChange(e)}
-                                  value={formData.password}
-                                  prefix={
-                                    <Icon
-                                      type="lock"
-                                      style={{
-                                        color: "white",
-                                        fontWeight: "bold",
-                                        textIndent: "10px",
-                                        fontSize: "15px"
-                                      }}
-                                    />
-                                  }
-                                />
-                              </Form.Item>
-                              </Col>{" "}
-                              <br />
-                              <Col span={16}>
-                                {" "}
-                                <Form.Item
+                              <Input.Password
+                                placeholder="Password"
+                                name="password"
+                                value={formData.password}
+                                type="password"
+                                onChange={e => handleChange(e)}
+                                value={formData.password}
+                                prefix={
+                                  <Icon
+                                    type="lock"
+                                    style={{
+                                      color: "white",
+                                      fontWeight: "bold",
+                                      textIndent: "10px",
+                                      fontSize: "15px"
+                                    }}
+                                  />
+                                }
+                              />
+                            </Form.Item>
+                          </Col>{" "}
+                          <br />
+                          <Col span={16}>
+                            {" "}
+                            <Form.Item
                               validateStatus={formData.phoneValidateStatus}
                               help={formData.phoneHelp}
-                             
                             >
-                                <Input
-                                  placeholder="Phone"
-                                  name="phone"
-                                  value={formData.phone}
-                                  onChange={e => handleChange(e)}
-                                  value={formData.phone}
-                                  prefix={
-                                    <Icon
-                                      type="phone"
-                                      style={{
-                                        color: "white",
-                                        fontWeight: "bold",
-                                        textIndent: "10px",
-                                        fontSize: "15px"
-                                      }}
-                                    />
-                                  }
-                                />
-                                </Form.Item>
-                              </Col>
-                              <Col span={16}>
-                                <span className="handelCheckBoxes">
-                                  <Checkbox
-                                    onChange={onChange}
-                                    value={formData.terms}
-                                    name="terms"
-                                  >
-                                    Term of Business and Privacy Policy
-                                  </Checkbox>
-                                </span>
-                              </Col>
-                              <Col span={16}>
-                                <span className="handelCheckBoxes">
-                                  <Checkbox
-                                    onChange={onChange}
-                                    name="privacy"
-                                    value={formData.privacy}
-                                  >
-                                    Have You Read and agree with our Terms or
-                                    <br />
-                                    business and Privacy Polices?
-                                  </Checkbox>
-                                </span>
-                              </Col>
-                              <Col span={20}>
-                                <Button
-                                  onClick={handleSubmit}
-                                  className="handelButtonStyle"
-                                  disabled={
-                                    formData.terms && formData.privacy 
-                                      ? false
-                                      : true
-                                  }
-                                >
-                                  {formData.terms}Register
-                                </Button>
-                              </Col>
-                            </Row>
-                          </Form>
-                       
+                              <Input
+                                placeholder="Phone"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={e => handleChange(e)}
+                                value={formData.phone}
+                                prefix={
+                                  <Icon
+                                    type="phone"
+                                    style={{
+                                      color: "white",
+                                      fontWeight: "bold",
+                                      textIndent: "10px",
+                                      fontSize: "15px"
+                                    }}
+                                  />
+                                }
+                              />
+                            </Form.Item>
+                          </Col>
+                          <Col span={16}>
+                            <span className="handelCheckBoxes">
+                              <Checkbox
+                                onChange={onChange}
+                                value={formData.terms}
+                                name="terms"
+                              >
+                                Term of Business and Privacy Policy
+                              </Checkbox>
+                            </span>
+                          </Col>
+                          <Col span={16}>
+                            <span className="handelCheckBoxes">
+                              <Checkbox
+                                onChange={onChange}
+                                name="privacy"
+                                value={formData.privacy}
+                              >
+                                Have You Read and agree with our Terms or
+                                <br />
+                                business and Privacy Polices?
+                              </Checkbox>
+                            </span>
+                          </Col>
+                          <Col span={20}>
+                            <Button
+                              onClick={handleSubmit}
+                              className="handelButtonStyle"
+                              disabled={
+                                formData.terms && formData.privacy
+                                  ? false
+                                  : true
+                              }
+                            >
+                              {formData.terms}Register
+                            </Button>
+                          </Col>
+                        </Row>
+                      </Form>
+
                       <Col span={20}>
                         Already have a account?{" "}
                         <Link to="/login">Login Here</Link>
@@ -363,15 +371,17 @@ function Signup(props) {
               </Col>
             </Row>
           </div>
-        </div>:
-        props.history.push("/home")}
+        </div>
+      ) : (
+        props.history.push("/home")
+      )}
     </>
   );
-  }
+}
 // }
 const WrappedRegistrationForm = Form.create({ name: "register" })(Signup);
-const mapDispatchToProps = (Dispatch,props) => ({
-  SignUp: state => Dispatch(SignUp(state,props))
+const mapDispatchToProps = (Dispatch, props) => ({
+  SignUp: state => Dispatch(SignUp(state, props))
 });
 
 const mapStateToProps = state => ({

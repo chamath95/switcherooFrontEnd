@@ -26,5 +26,9 @@ const SetModal=(payload)=>({
     type:actions.SET_MODAL,
     payload
 })
+const AddResetEmail=(payload)=>({
+    type:actions.ADD_RESETEMAIL,
+    payload
+})
 
-export {AddUser,UpdateUser,DeleteUser,Loading,AddErr,SetModal};
+export {AddUser,UpdateUser,DeleteUser,Loading,AddErr,SetModal,AddResetEmail};

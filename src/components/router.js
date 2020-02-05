@@ -59,9 +59,9 @@ class Routing extends React.PureComponent {
           {...rest}
           component={Home}
           render={({ location }) =>
-            UserState.user._id ?
-                children
-           : (
+            UserState.user._id ? (
+              children
+            ) : (
               <Redirect
                 to={{
                   pathname: "/login",
@@ -98,21 +98,30 @@ class Routing extends React.PureComponent {
                 <Home/>
               </PrivateRoute> */}
               {/* <Route path="/home" render={() => <Home />} /> */}
-              <Route path="/home" render={() => UserState.user._id ? (UserState.user.isVerified ? (<Home />) :
-                (<Redirect to={{
-                  pathname: "/verifymail",
-                  // state: { from: location }
-                }} />)
-              )
-                : (
-                  <Redirect
-                    to={{
-                      pathname: "/login",
-                      // state: { from: location }
-                    }}
-                  />
-                )
-              } />
+              <Route
+                path="/home"
+                render={() =>
+                  UserState.user._id ? (
+                    UserState.user.isVerified ? (
+                      <Home />
+                    ) : (
+                      <Redirect
+                        to={{
+                          pathname: "/verifymail"
+                          // state: { from: location }
+                        }}
+                      />
+                    )
+                  ) : (
+                    <Redirect
+                      to={{
+                        pathname: "/login"
+                        // state: { from: location }
+                      }}
+                    />
+                  )
+                }
+              />
               <Route
                 exact
                 path="/verifymail"

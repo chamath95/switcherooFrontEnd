@@ -25,8 +25,11 @@ import dummy from "./dummy";
 const { Panel } = Collapse;
 
 const { Header, Content, Footer } = Layout;
-const TIME_INCREMENT = 4000;
-const EXPERT_WAIT_TIME = 2500;
+const TIME_INCREMENT = 3000;
+const EXPERT_WAIT_TIME = 10;
+const PAUSE_WAITING = 2000;
+const TYPING_WAITING = 1000;
+const TIME_INCREMENT2 = 4000;
 
 class ExpertChat extends Component {
   constructor(props) {
@@ -37,11 +40,13 @@ class ExpertChat extends Component {
     this.clearResponse = this.clearResponse.bind(this);
     this.getResponse = this.getResponse.bind(this);
     this.handleMenuClick = this.handleMenuClick.bind(this);
+    this.setHistory = this.setHistory.bind(this);
+    this.scrollToBottom = this.scrollToBottom.bind(this);
   }
   // const [state, setState] = useState();
   // const [isLoading, setLoading] = useState(true);
   state = {
-    isLoading: true,
+    isLoading: false,
     possibleResponse: [],
     // chats: dummy,
     chats: []
@@ -51,21 +56,55 @@ class ExpertChat extends Component {
   };
   componentDidUpdate() {}
   // const [chats, setChat] = useState([]);
-  setLoading = isLoading => {
+  setLoading = async isLoading => {
+    // if (isLoading) {
+    //   setTimeout(() => {
+    //     this.setState({ isLoading: true });
+    //   }, TYPING_WAITING);
+    //   setTimeout(() => {
+    //     this.setState({ isLoading: false });
+    //   }, TYPING_WAITING + 1500);
+    // } else {
+    //   this.setState({ isLoading });
+    // }
     this.setState({ isLoading });
+
+    await this.scrollToBottom();
   };
-  setResponse = possibleResponse => {
+  setResponse = async possibleResponse => {
     if (!possibleResponse) return;
     this.setState({ possibleResponse });
+    await this.scrollToBottom();
   };
   handleMenuClick = () => {};
   clearResponse = _ => {
     this.setState({ possibleResponse: [] });
   };
-  setChat = chats => {
+  setChat = async chats => {
     const { state } = this;
     this.setState({ chats });
-    this.scrollToBottom();
+    await this.scrollToBottom();
+  };
+  setHistory = async (newChat, possibleResponse) => {
+    const dispatch = this.props.dispatch;
+    const token = localStorage.getItem("tokenas");
+
+    await api.post(
+      "/api/expertChat/setHistory",
+      { newChat, possibleResponse },
+      token,
+      dispatch,
+      (err, res) => {
+        if (!err) {
+          // const chat = res;
+          // let waitTime = 0;
+          // this.scrollToBottom();
+          // this.getResponse(chat);
+        }
+        // console.log(res, err);
+      }
+    );
+    await this.scrollToBottom();
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -78,16 +117,29 @@ class ExpertChat extends Component {
         null,
         token,
         dispatch,
-        (err, res) => {
+        async (err, res) => {
           if (!err) {
             const chat = res.chat;
-            let waitTime = 0;
-            this.getResponse(chat);
+            // this.getResponse(chat);
+
+            if (res.history) {
+              const { possibleResponse, history } = res;
+              console.log({ possibleResponse });
+              setChat(JSON.parse(history));
+              setTimeout(() => {
+                this.setLoading(false);
+              }, TYPING_WAITING);
+              await setResponse(JSON.parse(possibleResponse));
+              return;
+            } else {
+              let waitTime = 0;
+              this.getResponse(chat, true);
+            }
           }
           // console.log(res, err);
         }
       );
-      setLoading(false);
+      // setLoading(false);
     })();
   }
   render() {
@@ -211,6 +263,8 @@ class ExpertChat extends Component {
                             }
                           }) => {
                             const { setChat, setLoading, setResponse } = this;
+                            const possibleResponse = this.state
+                              .possibleResponse;
                             let newChat = [
                               ...this.state.chats,
                               {
@@ -218,12 +272,15 @@ class ExpertChat extends Component {
                                 time: new Date().toJSON(),
                                 status: "response",
                                 // ...chat,
-                                possibleResponse: this.state.possibleResponse
+                                possibleResponse
                               }
                             ];
 
                             this.setChat(newChat);
-                            this.setLoading(true);
+                            // setTimeout(async () => {
+                            // this.setLoading(true);
+                            // }, TYPING_WAITING);
+
                             await this.scrollToBottom();
                             this.clearResponse();
                             const token = localStorage.getItem("tokenas");
@@ -231,17 +288,17 @@ class ExpertChat extends Component {
                             setTimeout(async () => {
                               api.post(
                                 "/api/expertChat/getResponse",
-                                { _id },
+                                { _id, newChat, possibleResponse },
                                 token,
                                 dispatch,
-                                (err, res) => {
+                                async (err, res) => {
                                   if (!err) {
                                     const chat = res;
                                     let waitTime = 0;
                                     this.scrollToBottom();
-                                    this.getResponse(chat);
+                                    await this.getResponse(chat);
                                   }
-                                  console.log(res, err);
+                                  // console.log(res, err);
                                 }
                               );
                             }, EXPERT_WAIT_TIME);
@@ -300,6 +357,7 @@ class ExpertChat extends Component {
                         }}
                         onClick={async () => {
                           const { setChat, setLoading, setResponse } = this;
+                          const possibleResponse = this.state.possibleResponse;
                           let newChat = [
                             ...this.state.chats,
                             {
@@ -315,23 +373,23 @@ class ExpertChat extends Component {
                           this.setChat(newChat);
                           await this.scrollToBottom();
                           this.clearResponse();
-                          this.setLoading(true);
+                          // this.setLoading(true);
                           const token = localStorage.getItem("tokenas");
                           this.scrollToBottom();
                           setTimeout(async () => {
                             await api.post(
                               "/api/expertChat/getResponse",
-                              { _id },
+                              { _id, newChat, possibleResponse },
                               token,
                               dispatch,
-                              (err, res) => {
+                              async (err, res) => {
                                 if (!err) {
                                   const chat = res;
                                   let waitTime = 0;
                                   this.scrollToBottom();
-                                  this.getResponse(chat);
+                                  await this.getResponse(chat);
                                 }
-                                console.log(res, err);
+                                // console.log(res, err);
                               }
                             );
                           }, EXPERT_WAIT_TIME);
@@ -354,10 +412,99 @@ class ExpertChat extends Component {
       </>
     );
   }
-  getResponse = chat => {
-    let waitTime = 0;
+  getResponse = (chat, root) => {
+    let waitTime = 4000;
+    let expertPause = root ? 4000 : 3000;
+    let expertWait = root ? 5000 : 4000;
 
     const { setChat, setLoading, setResponse } = this;
+    if (root) {
+      let waitTime2 = 4000;
+
+      const { setChat, setLoading, setResponse } = this;
+      this.scrollToBottom();
+      if (chat) {
+        const questions = chat.questions;
+        let newChat = [
+          ...this.state.chats,
+          {
+            message: questions[0],
+            time: new Date().toJSON(),
+            status: "message",
+            dropdown: chat.dropdown
+            // ...chat
+          }
+        ];
+        // setChat(newChat);
+        // console.log({ dropdown: chat.dropdown });
+
+        let possibleResponse =
+          chat.response &&
+          chat.response.map(response => ({
+            _id: chat._id,
+            response,
+            dropdown: chat.dropdown
+          }));
+        const fistReply = ignore => {
+          setTimeout(() => {
+            this.setLoading(true);
+          }, 1000);
+          setTimeout(() => {
+            this.setLoading(false);
+            this.setChat(newChat);
+            if (!ignore) {
+              this.setResponse(possibleResponse);
+              this.setHistory(newChat, possibleResponse);
+            }
+          }, 4000);
+        };
+        if (questions.length <= 1) {
+          fistReply();
+        }
+
+        questions.forEach((question, i) => {
+          if (i == 0) {
+            fistReply(true);
+            return;
+          }
+          setLoading(true);
+          waitTime2 = 4000 * (i + 1);
+          expertPause = 4000 * (i + 1) - 3000;
+          expertWait = 4000 * (i + 1) - 1000;
+          console.log({ expertPause, expertWait, waitTime2 });
+          this.scrollToBottom();
+          setTimeout(() => {
+            // this.setLoading(true);
+            this.setLoading(true);
+          }, expertPause);
+          setTimeout(() => {
+            // this.setLoading(true);
+            this.setLoading(false);
+          }, expertWait);
+
+          setTimeout(() => {
+            let newChat = [
+              ...this.state.chats,
+              {
+                message: question,
+                time: new Date().toJSON(),
+                status: "message",
+                ...chat
+              }
+            ];
+            setChat(newChat);
+            this.scrollToBottom();
+
+            if (questions.length - 1 == i) {
+              setLoading(false);
+              this.setResponse(possibleResponse);
+            }
+          }, waitTime2);
+        });
+        return;
+      }
+      return;
+    }
     this.scrollToBottom();
     if (chat) {
       const questions = chat.questions;
@@ -371,8 +518,6 @@ class ExpertChat extends Component {
           // ...chat
         }
       ];
-      setChat(newChat);
-      // console.log({ dropdown: chat.dropdown });
 
       let possibleResponse =
         chat.response &&
@@ -381,17 +526,42 @@ class ExpertChat extends Component {
           response,
           dropdown: chat.dropdown
         }));
+      const fistReply = ignore => {
+        setTimeout(() => {
+          this.setLoading(true);
+        }, TYPING_WAITING);
+        setTimeout(() => {
+          this.setLoading(false);
+          this.setChat(newChat);
+          if (!ignore) {
+            this.setResponse(possibleResponse);
+            this.setHistory(newChat, possibleResponse);
+          }
+        }, TYPING_WAITING + PAUSE_WAITING);
+      };
       if (questions.length <= 1) {
-        setLoading(false);
-        this.setResponse(possibleResponse);
+        // this.setLoading(false);
+        fistReply();
       }
-
       questions.forEach((question, i) => {
-        if (i == 0) return;
-        setLoading(true);
+        if (i == 0) {
+          fistReply(true);
+          return;
+        }
+        // setLoading(true);
         waitTime = waitTime + TIME_INCREMENT;
+        expertPause = expertPause + 1000;
+        expertWait = expertWait + 2000;
+        // alert(expertPause);
         this.scrollToBottom();
-
+        setTimeout(() => {
+          // this.setLoading(true);
+          this.setLoading(true);
+        }, expertPause);
+        setTimeout(() => {
+          // this.setLoading(true);
+          this.setLoading(false);
+        }, expertWait);
         setTimeout(() => {
           let newChat = [
             ...this.state.chats,
@@ -403,11 +573,13 @@ class ExpertChat extends Component {
             }
           ];
           setChat(newChat);
+          this.setLoading(false);
           this.scrollToBottom();
 
           if (questions.length - 1 == i) {
-            setLoading(false);
+            // setLoading(false);
             this.setResponse(possibleResponse);
+            this.setHistory(newChat, possibleResponse);
           }
         }, waitTime);
       });

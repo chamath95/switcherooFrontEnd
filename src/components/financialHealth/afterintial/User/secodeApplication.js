@@ -356,11 +356,11 @@ class App extends React.Component {
       selfEmployedOrPayeEmpty = true;
       form1Validate = false;
     }
-    if (!publicOrPrivateSector) {
-      publicOrPrivateSectorEmpty = true;
+    if (childrenFinanciallyDependent === "") {
+      childrenFinanciallyDependentEmpty = true;
       form1Validate = false;
     }
-    if (childrenFinanciallyDependent) {
+    if (childrenFinanciallyDependent !== "") {
       if (ageOfChildren) {
         validate = ageOfChildren.some(value => value == "" || value == 0);
         if (validate) {

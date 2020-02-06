@@ -179,14 +179,10 @@ input[type="number"] {
 .mysetting {
   display: flex;
 }
-<<<<<<< HEAD
 .my-margin{
   margin-bottom: -23px;
 }
 .user_form1 .errormissting{
-=======
-.user_form1 .errormissting {
->>>>>>> c23299b42d21b0b5d402be743b2f27ad2c818d39
   position: relative;
   left: -180px;
 }

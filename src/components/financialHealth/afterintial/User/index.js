@@ -24,7 +24,7 @@ class App extends React.Component {
     dateOfBirthEmpty: false,
     ageOfChildren: [],
     ageOfChildrenEmpty: false,
-    childrenFinanciallyDependentEmpty: "",
+    childrenFinanciallyDependentEmpty: false,
     maritalStatusOptions: ["Married", "Single", "Widowed"],
     selfEmployedOrPaye: "",
     selfEmployedOrPayeEmpty: false,
@@ -335,11 +335,11 @@ class App extends React.Component {
       dateOfBirthEmpty = true;
       form1Validate = false;
     }
-    if (!childrenFinanciallyDependent) {
+    if (childrenFinanciallyDependent === "") {
       childrenFinanciallyDependentEmpty = true;
       form1Validate = false;
     }
-    if (childrenFinanciallyDependent) {
+    if (childrenFinanciallyDependent !== "") {
       if (ageOfChildren) {
         validate = ageOfChildren.some(value => value == "" || value == 0);
         if (validate) {
@@ -450,6 +450,7 @@ class App extends React.Component {
     } else if (this.state.current === 1 && form2Validate) {
       this.setState({ current: 2 });
     } else if (this.state.current === 2 && form3Validate) {
+      debugger;
       this.props.SetApplicantOneData(
         {
           userId: this.props.userId,

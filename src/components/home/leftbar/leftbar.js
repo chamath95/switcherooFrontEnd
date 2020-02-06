@@ -87,7 +87,7 @@ class LeftBar extends React.Component {
           <span className="connector"></span>
           <Menu.Item key="6">
             <span className="menu-icon">
-              <img src="images/home/icons/mortgage_icon.png" />
+              <img src="images/home/icons/Group758.svg" />
             </span>
             <p>Your Recommendation</p>
           </Menu.Item>
@@ -103,7 +103,7 @@ class LeftBar extends React.Component {
           <span className="connector"></span>
           <Menu.Item key="8">
             <span className="menu-icon">
-              <img src="images/home/icons/mortgage_icon.png" />
+              <img src="images/home/icons/Group757.svg" />
             </span>
             <p>Your Life insurance</p>
           </Menu.Item>

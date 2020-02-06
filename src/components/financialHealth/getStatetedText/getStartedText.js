@@ -15,7 +15,7 @@ class GetStartedText extends React.Component {
         {console.log(this.props.financial_data)}
         <Row className="gst-row">
           <Col lg={12}>
-            <h1 className="h1">Hi, Dave</h1>
+            <h1 className="h1">Hi, {this.props.userFirstName}</h1>
             <p className="p1">
               We understand that taking out a mortgage is as big a deal as it
               gets so we want to make sure that you are financially in a good
@@ -53,12 +53,13 @@ class GetStartedText extends React.Component {
 }
 const mapStateToProps = ({
   userReducer: {
-    user: { _id }
+    user: { _id , firstName  }
   },
   Financial_data: { financial_Health_Check }
 }) => ({
   financial_data: financial_Health_Check,
-  userId: _id
+  userId: _id , 
+  userFirstName: firstName
 });
 const mapDispatchToProps = dispacth => ({
   Get_Financial_data: props => dispacth(Api.financialDataGet(props))

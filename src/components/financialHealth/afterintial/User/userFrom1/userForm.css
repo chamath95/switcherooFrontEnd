@@ -20,7 +20,9 @@
 .fo_1_con .btn-div .btn2 {
   background: #fb9500;
 }
-
+.magrin-t10{
+  
+}
 .fo_1_con p.heading3 {
   width: 65%;
   font-size: 17px;
@@ -142,6 +144,9 @@
 }
 .mysetting{
   display: flex;
+}
+.my-margin{
+  margin-bottom: -23px;
 }
 .user_form1 .errormissting{
   position: relative;

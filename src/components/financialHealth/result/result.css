@@ -62,10 +62,11 @@
   padding: 5px 60px 0 25px;
 }
 .result-con .d1 .meter-div {
-  height: 130px;
+  height: 80px;
   text-align: right;
-  width: 100%;
+  width: 80%;
   border-radius: 10px;
+  color: black;
 }
 .result-con .d1 .meter-div img {
   width: 65%;

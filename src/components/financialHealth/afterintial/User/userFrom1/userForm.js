@@ -126,7 +126,7 @@ class UserForm extends Component {
               handlebedFunc={this.props.thisObject.handleChild}
             />
           </Col>
-          <Col lg={24} className="col2 mysetting">
+          <Col lg={24} className="col2 my-margin mysetting">
             <p className="heading3">
               Do you work in the Public or Private sector?
             </p>
@@ -136,7 +136,7 @@ class UserForm extends Component {
               </span>
             )}
           </Col>
-          <Col lg={24} className="q1 posstionChange">
+          <Col lg={24} className="q1 magrin-t10 posstionChange">
             <div
               className={
                 publicOrPrivateSector === "Private Sector"
@@ -176,7 +176,7 @@ class UserForm extends Component {
           </Col>
           <div style={{ clear: "both" }}></div>
           <Col lg={24} className="col2 mysetting">
-            <p className="heading3">
+            <p className="heading3" style={{marginTop: "10px"}}>
               Are you a PAYE employee or Self Employed?
             </p>
             {selfEmployedOrPayeEmpty && (

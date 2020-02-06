@@ -106,7 +106,7 @@ class Property extends React.Component {
             [`${name}Validation`]: "error",
             [`${name}Help`]: "please Select one of above",
             [`${name}ValidationStatus`]: false,
-            [`${name}V`]: false 
+            [`${name}V`]: false
           });
         } else {
           this.setState({
@@ -117,7 +117,7 @@ class Property extends React.Component {
             howManyBedrooms: "Two Bedrooms",
             valueOfProperty: 250000,
             propertyLocation: "Urban",
-            [`${name}V`]: false 
+            [`${name}V`]: false
           });
         }
         break;
@@ -129,7 +129,7 @@ class Property extends React.Component {
       nextProps.financial_Property.typeOfProperty &&
       nextProps.financial_Property.typeOfProperty !== "" &&
       prevState.howManyBedrooms !==
-        nextProps.financial_Property.howManyBedrooms &&
+      nextProps.financial_Property.howManyBedrooms &&
       prevState.userId !== nextProps.userId
     ) {
       const {
@@ -169,7 +169,7 @@ class Property extends React.Component {
   handlelocation = value => {
     this.setState({
       propertyLocation: value,
-    propertyLocationV: false,
+      propertyLocationV: false,
     });
   };
   handlebed = value => {
@@ -182,7 +182,7 @@ class Property extends React.Component {
   handlepay = value => {
     this.setState({
       yearsToPayOffMortgage: value,
-      yearsToPayOffMortgageV:false
+      yearsToPayOffMortgageV: false
     });
   };
   handleQ = e => {
@@ -293,6 +293,8 @@ class Property extends React.Component {
           <Col lg={24} className="q1">
             <div
               onClick={e => this.clickRadio(e)}
+              style={{ marginBottom: "10px" }}
+
               className={
                 typeOfProperty === "Apartment"
                   ? "radio-container container_malta"
@@ -355,7 +357,7 @@ class Property extends React.Component {
               ))}
             </Select>
           </Col>
-          <Col lg={24} className="col3" style={{ position: "relative" }}>
+          <Col lg={24} className="col3" style={{ position: "relative", marginTop: "10px" }}>
             <p className="heading3">What is the value of Property?</p>
             {this.state.valueOfPropertyV === true ? (
               <span className="p-error-v">* This field cannot be empty</span>
@@ -409,7 +411,7 @@ class Property extends React.Component {
           <Col lg={24} className="col3" style={{ position: "relative" }}>
             <span className="eruo"> &euro; </span>
 
-            <p className="heading3">
+            <p className="heading3" style={{marginTop:"10px"}}>
               What is the size of mortgage are you looking for?
             </p>
             {this.state.sizeOfMortgageV === true ? (
@@ -452,9 +454,9 @@ class Property extends React.Component {
                   ? "Select Option"
                   : yearsToPayOffMortgage
               }
-              // className={
-              //   typeOfProperty !== "" ? "selectPRo borderRed" : "selectPRo"
-              // }
+            // className={
+            //   typeOfProperty !== "" ? "selectPRo borderRed" : "selectPRo"
+            // }
             >
               {years.map((val, ind) => {
                 return (

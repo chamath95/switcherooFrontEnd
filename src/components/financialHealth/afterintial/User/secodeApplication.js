@@ -5,7 +5,7 @@ import "./user.css";
 import UserForm1 from "./userFrom1/userForm";
 import UserForm2 from "./userFrom2/userForm";
 import UserForm3 from "./userFrom3/userForm";
-
+import { message } from "antd";
 import Api from "../../../../redux/api/financialHealthCheck";
 import { connect } from "react-redux";
 
@@ -15,6 +15,8 @@ class App extends React.Component {
     userId: "",
     dateOfBirth: "",
     maritalStatus: "",
+    dateOfBirthEmpty: false,
+    ageOfChildren: [],
 
     maritalStatus: false,
     maritalStatusEmpty: false,
@@ -90,13 +92,39 @@ class App extends React.Component {
   };
 
   handleMerital = value => {
-    this.setState({ maritalStatus: value , maritalStatusEmpty:false});
+    this.setState({ maritalStatus: value, maritalStatusEmpty: false });
   };
   handleWork = value => {
     this.setState({ selfEmployedOrPaye: value });
   };
   handleChild = value => {
-    this.setState({ childrenFinanciallyDependent: value , childrenFinanciallyDependentEmpty:false});
+    let ageOfChildren = [];
+    let lengthArray = value;
+    if (value === "5+") {
+      lengthArray = 6;
+    }
+    for (var i = 0; i < lengthArray; i++) {
+      ageOfChildren.push(0);
+    }
+    this.setState({
+      childrenFinanciallyDependent: value,
+      childrenFinanciallyDependentEmpty: false,
+      ageOfChildren
+    });
+  };
+  arraySetAge = (e, index) => {
+    const { value } = e.target;
+
+    if (Number(value) < 35) {
+      const { ageOfChildren } = this.state;
+      ageOfChildren[index] = Number(value);
+      this.setState({
+        ageOfChildren,
+        ageOfChildrenEmpty: false
+      });
+    } else {
+      message.error("The age seems to be incorrect for child");
+    }
   };
   handleQ = e => {
     var radioContainers = e.target.parentNode.parentNode.childNodes;
@@ -113,7 +141,7 @@ class App extends React.Component {
   onChangeDate = (date, dateString) => {
     this.setState({
       dateOfBirth: date,
-      dateOfBirthEmpty:false
+      dateOfBirthEmpty: false
     });
   };
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -136,6 +164,7 @@ class App extends React.Component {
         otherVariableIncome,
         annualPension,
         dateOfBirth,
+        ageOfChildren,
         nusrseryOrChildminding,
         spousalMaintenanceCosts,
         monthlyCreditCardCharges,
@@ -170,6 +199,7 @@ class App extends React.Component {
         childrenFinanciallyDependent,
         publicOrPrivateSector,
         basicIncome,
+        ageOfChildren,
         overTimeEarnedInyear,
         commissionEarnedInYear,
         bonusEarnedInYear,
@@ -230,7 +260,8 @@ class App extends React.Component {
     let overDraftChargesEmpty = false;
     let monthlyLoanRepaymentsEmpty = false;
     let monthlyCashFlowEmpty = false;
-
+    let ageOfChildrenEmpty = false;
+    let validate = false;
     const {
       maritalStatus,
       selfEmployedOrPaye,
@@ -265,6 +296,8 @@ class App extends React.Component {
       monthlyCreditCardChargesDisable,
       overDraftLimitDisable,
       creditCardLimitDisable,
+
+      ageOfChildren,
       overDraftChargesDisable,
       monthlyLoanRepaymentsDisable,
       monthlyCashFlowDisable
@@ -279,6 +312,7 @@ class App extends React.Component {
       overTimeEarnedInyear,
       commissionEarnedInYear,
       bonusEarnedInYear,
+      ageOfChildren,
       guaranteedAllowance,
       otherVariableIncome,
       annualPension,
@@ -322,9 +356,18 @@ class App extends React.Component {
       selfEmployedOrPayeEmpty = true;
       form1Validate = false;
     }
-    if (!publicOrPrivateSector) {
-      publicOrPrivateSectorEmpty = true;
+    if (childrenFinanciallyDependent === "") {
+      childrenFinanciallyDependentEmpty = true;
       form1Validate = false;
+    }
+    if (childrenFinanciallyDependent !== "") {
+      if (ageOfChildren) {
+        validate = ageOfChildren.some(value => value == "" || value == 0);
+        if (validate) {
+          ageOfChildrenEmpty = true;
+          form1Validate = false;
+        }
+      }
     }
     if (!basicIncomeDisable && !basicIncome && current === 1) {
       basicIncomeEmpty = true;
@@ -438,6 +481,7 @@ class App extends React.Component {
         publicOrPrivateSectorEmpty,
         maritalStatusEmpty,
         dateOfBirthEmpty,
+        ageOfChildrenEmpty,
         childrenFinanciallyDependentEmpty
       });
     } else if (!form2Validate) {

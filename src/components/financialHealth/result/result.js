@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col, Button, message } from "antd";
 import "./result.css";
 import { connect } from "react-redux";
-
+import GaugeChart from 'react-gauge-chart'
 import Api from "../../../redux/api/financialHealthCheck";
 import { baseurl } from "../../../redux/api/index";
 
@@ -40,10 +40,10 @@ class YourResult extends React.Component {
         // dispatch(actions.LoadingFinancialData(true));
         this.setState({ [route]: false });
         if (res.status === 201)
-        res.json().then(res => {
+          res.json().then(res => {
             this.success(message);
+          })
       })
-    })
       .catch(err => {
         console.log(err);
         this.setState({ [route]: false });
@@ -64,7 +64,7 @@ class YourResult extends React.Component {
           }
           loading={this.state.fillHavenSpreadSheet}
         >
-           fillHavenSpreadSheet Testing
+          fillHavenSpreadSheet Testing
         </Button>
 
         <Button
@@ -97,9 +97,9 @@ class YourResult extends React.Component {
           <h1>Switcheroo.ie Affordability Health Check</h1>
 
           <p className="p1">
-            So {"{name}"}, the good news is that our analysis shows that this
-            will be an affordable mortgage for you and you have passed your
-            affordability health check with flying colours.
+            So {this.props.userFirstName}, the good news is that our analysis shows that this
+                will be an affordable mortgage for you and you have passed your
+                affordability health check with flying colours.
           </p>
           <Row>
             <Col lg={12}>
@@ -110,7 +110,14 @@ class YourResult extends React.Component {
             </Col>
             <Col lg={12}>
               <div className="meter-div">
-                <img src="images/home/meter.jpg" alt="meter" />
+                <GaugeChart id="gauge-chart2"
+                  nrOfLevels={20}
+                  percent={0.86}
+                  animDelay={6}
+                  textColor="black"
+                  needleColor="background: #fb9500"
+                />
+                {/* <img src="images/home/meter.jpg" alt="meter" /> */}
               </div>
             </Col>
           </Row>
@@ -168,10 +175,11 @@ class YourResult extends React.Component {
 }
 const mapStateToProps = ({
   userReducer: {
-    user: { _id }
+    user: { _id, firstName }
   }
 }) => ({
-  userId: _id
+  userId: _id,
+  userFirstName: firstName
 });
 
 const mapDispatchToProps = dispacth => ({

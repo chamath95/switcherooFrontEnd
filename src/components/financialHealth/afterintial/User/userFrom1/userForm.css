@@ -20,7 +20,9 @@
 .fo_1_con .btn-div .btn2 {
   background: #fb9500;
 }
-
+.magrin-t10{
+  
+}
 .fo_1_con p.heading3 {
   width: 65%;
   font-size: 17px;
@@ -41,7 +43,37 @@
   font-weight: 600;
   font-size: 14px;
 }
+.fo_1_con .maltaback input {
+  background-color: #fb9500 !important;
+  border: #fb9500 solid 2px !important;
+  padding-left: 25px;
+  color: white;
+}
 
+.widthControl {
+  width: 10%;
+}
+.fo_1_con .input  input {
+  width: 80%;
+  height: 40px;
+  background: #cccccc;
+  border-radius: 20px;
+  border: 2px solid gray;
+  outline: none;
+  padding: 0 20px;
+  font-weight: 600;
+  color: white;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 .fo_1_con .selectPRo {
   width: 37% !important;
   float: left;
@@ -65,6 +97,10 @@
   border-radius: 100%;
   -webkit-transition: all 0.2s ease;
   transition: all 0.2s ease;
+}
+.myclassYear{
+  display: flex;
+  flex-direction: row;
 }
 
 .fo_1_con .q1 input[type="radio"]:not(:checked) + label:after {
@@ -140,8 +176,11 @@
   position: relative;
   top: 25px;
 }
-.mysetting{
+.mysetting {
   display: flex;
+}
+.my-margin{
+  margin-bottom: -23px;
 }
 .user_form1 .errormissting{
   position: relative;

@@ -17,6 +17,8 @@ class UserForm extends Component {
       publicOrPrivateSectorEmpty,
       maritalStatusEmpty,
       dateOfBirthEmpty,
+      ageOfChildren,
+      ageOfChildrenEmpty,
       childrenFinanciallyDependentEmpty,
       dateOfBirth
     } = this.props.allState;
@@ -126,7 +128,49 @@ class UserForm extends Component {
               handlebedFunc={this.props.thisObject.handleChild}
             />
           </Col>
+<<<<<<< HEAD
           <Col lg={24} className="col2 my-margin mysetting">
+=======
+          {childrenFinanciallyDependent > 0 ||
+          childrenFinanciallyDependent == "5+" ? (
+            <div>
+              <Col lg={24} className="col2 mysetting">
+                <p className="heading3">Please Provide their age in years</p>
+                {ageOfChildrenEmpty && (
+                  <span className="errormissting">
+                    * This field cannot be empty
+                  </span>
+                )}
+              </Col>
+              <Col lg={24} className="q1 myclassYear">
+                {ageOfChildren
+                  ? ageOfChildren.map((value, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className={
+                            value !== 0
+                              ? "input maltaback widthControl"
+                              : "input widthControl"
+                          }
+                        >
+                          <input
+                            type="number"
+                            name="ageOfChildren"
+                            onChange={e =>
+                              this.props.thisObject.arraySetAge(e, index)
+                            }
+                            value={value ? value : ""}
+                          />
+                        </div>
+                      );
+                    })
+                  : null}
+              </Col>
+            </div>
+          ) : null}
+          <Col lg={24} className="col2 mysetting">
+>>>>>>> c23299b42d21b0b5d402be743b2f27ad2c818d39
             <p className="heading3">
               Do you work in the Public or Private sector?
             </p>

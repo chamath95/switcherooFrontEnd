@@ -22,6 +22,8 @@ class App extends React.Component {
     maritalStatus: false,
     maritalStatusEmpty: false,
     dateOfBirthEmpty: false,
+    ageOfChildren: [],
+    ageOfChildrenEmpty: false,
     childrenFinanciallyDependentEmpty: "",
     maritalStatusOptions: ["Married", "Single", "Widowed"],
     selfEmployedOrPaye: "",
@@ -100,12 +102,34 @@ class App extends React.Component {
     this.setState({ selfEmployedOrPaye: value });
   };
   handleChild = value => {
+    let ageOfChildren = [];
+    let lengthArray = value;
+    if (value === "5+") {
+      lengthArray = 6;
+    }
+    for (var i = 0; i < lengthArray; i++) {
+      ageOfChildren.push(0);
+    }
     this.setState({
       childrenFinanciallyDependent: value,
-      childrenFinanciallyDependentEmpty: false
+      childrenFinanciallyDependentEmpty: false,
+      ageOfChildren
     });
   };
+  arraySetAge = (e, index) => {
+    const { value } = e.target;
 
+    if (Number(value) < 35) {
+      const { ageOfChildren } = this.state;
+      ageOfChildren[index] = Number(value);
+      this.setState({
+        ageOfChildren,
+        ageOfChildrenEmpty: false
+      });
+    } else {
+      message.error("The age seems to be incorrect for child");
+    }
+  };
   handleRedioBtn = e => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -154,7 +178,8 @@ class App extends React.Component {
         overDraftChargesDisable,
         monthlyLoanRepaymentsDisable,
         monthlyCashFlowDisable,
-        basicIncomeDisable
+        basicIncomeDisable,
+        ageOfChildren
       } = nextProps.financial_back_data.applicantOne;
       const { userId } = nextProps;
 
@@ -173,7 +198,7 @@ class App extends React.Component {
         otherVariableIncome,
         annualPension,
         dateOfBirth,
-
+        ageOfChildren,
         nusrseryOrChildminding,
         spousalMaintenanceCosts,
         monthlyCreditCardCharges,
@@ -227,9 +252,11 @@ class App extends React.Component {
     let overDraftChargesEmpty = false;
     let monthlyLoanRepaymentsEmpty = false;
     let monthlyCashFlowEmpty = false;
-
+    let ageOfChildrenEmpty = false;
+    let validate = false;
     const {
       maritalStatus,
+      ageOfChildren,
       selfEmployedOrPaye,
       childrenFinanciallyDependent,
       publicOrPrivateSector,
@@ -272,6 +299,7 @@ class App extends React.Component {
       childrenFinanciallyDependent,
       publicOrPrivateSector,
       basicIncome,
+      ageOfChildren,
       dateOfBirth,
       overTimeEarnedInyear,
       commissionEarnedInYear,
@@ -310,6 +338,15 @@ class App extends React.Component {
     if (!childrenFinanciallyDependent) {
       childrenFinanciallyDependentEmpty = true;
       form1Validate = false;
+    }
+    if (childrenFinanciallyDependent) {
+      if (ageOfChildren) {
+        validate = ageOfChildren.some(value => value == "" || value == 0);
+        if (validate) {
+          ageOfChildrenEmpty = true;
+          form1Validate = false;
+        }
+      }
     }
     if (!maritalStatus) {
       maritalStatusEmpty = true;
@@ -439,6 +476,7 @@ class App extends React.Component {
         publicOrPrivateSectorEmpty,
         maritalStatusEmpty,
         dateOfBirthEmpty,
+        ageOfChildrenEmpty,
         childrenFinanciallyDependentEmpty
       });
     } else if (!form2Validate) {

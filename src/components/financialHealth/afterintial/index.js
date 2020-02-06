@@ -9,7 +9,7 @@ import "./index.css"
 
 export class index extends Component {
   state = {
-    selectedKey: 0
+    selectedKey: 2
   }
 
   changeProfRoute = key => this.setState({ selectedKey: key });

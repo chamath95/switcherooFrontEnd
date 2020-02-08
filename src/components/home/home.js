@@ -17,6 +17,7 @@ import AfterIntial from "../financialHealth/afterintial/"
 import StepOne from "../details/step1/step1";
 import StepTwo from '../details/step2/step2';
 import StepThree from "../details/step3/step3";
+import StepFour from "../details/step4/step4";
 import SwitcherThree from '../details/switcher3/switcher3'; 
 // import AdditionalProperty from "../details/additionalProperty/AdditionalProperty";
 import AdditionalPropertyIndex from "../details/additionalProperty/additionalPropertyIndex";
@@ -55,6 +56,7 @@ function Home(props) {
 
                     <Route exact path="/home/details/s2" component={StepTwo} />
                     <Route exact path="/home/details/s3" component={StepThree} />
+                    <Route exact path="/home/details/s4" component={StepFour} />
                     <Route exact path="/home/details/switcher3" component={SwitcherThree} />
                     <Route exact path="/home/details/additional_p/:number" component={AdditionalPropertyIndex} />
                     <Route exact path="/home/details/final_page" component={FinalPage} />

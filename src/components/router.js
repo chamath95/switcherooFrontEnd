@@ -99,7 +99,7 @@ class Routing extends React.PureComponent {
                 <Home/>
               </PrivateRoute>  */}
               {/* <Route path="/home" render={() => <Home />} /> */}
-              <Route path="/home" render={() => UserState.user._id ? (UserState.user.isVerified ? (<Home />) :
+              <Route path="/home" render={() => UserState.user._id ? (!UserState.user.isVerified ? (<Home />) :
                 (<Redirect to={{
                   pathname: "/verifymail",
                    state: { from: location }

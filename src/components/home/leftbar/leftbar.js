@@ -66,7 +66,10 @@ class LeftBar extends React.Component {
             </p>
           </Menu.Item>
           <span className="connector"></span>
-          <Menu.Item key="4">
+          <Menu.Item key="4"
+                      onClick={() => {
+                        this.handleRoute("/home/details/s4");
+                      }}>
             <span className="menu-icon">
               <img src="images/home/icons/document_icon.png" />
             </span>

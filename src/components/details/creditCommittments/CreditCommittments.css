@@ -1,0 +1,225 @@
+.credit-commitments {
+    min-height: 80vh;
+    margin: 20px 20px 20px 20px;
+    padding: 20px 20px 20px 80px;
+    clear: both;
+    border-radius: 10px;
+    font-family: Montserrat;
+    box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.05);
+  }
+  .credit-commitments .q1 .radio-container {
+    width: 37%;
+    float: left;
+    margin: 0 40px 0 0;
+    cursor: pointer;
+    height: 40px;
+    background: #cccccc;
+    border-radius: 20px;
+    border: 2px solid gray;
+  }
+  .credit-commitments .q1 .radio-container:last-child {
+    margin: 0 0 0 0;
+  }
+  .credit-commitments .q1 input[type="radio"]:checked,
+  .credit-commitments .q1 input[type="radio"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+  }
+  .credit-commitments .q1 input[type="radio"]:checked + label,
+  .credit-commitments .q1 input[type="radio"]:not(:checked) + label {
+    position: relative;
+    padding-left: 40px;
+    cursor: pointer;
+    line-height: 18px;
+    font-size: 16px;
+    font-weight: 500;
+    display: inline-block;
+    color: white;
+    margin: 9px 0 0 30px;
+  }
+  
+  .credit-commitments .q1 input[type="radio"]:checked + label:before,
+  .credit-commitments .q1 input[type="radio"]:not(:checked) + label:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border: 1px solid gray;
+    border-radius: 100%;
+    background: #fff;
+  }
+  
+  .credit-commitments .q1 input[type="radio"]:checked + label:after,
+  .credit-commitments .q1 input[type="radio"]:not(:checked) + label:after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background: gray;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+  }
+  
+  .credit-commitments .q1 input[type="radio"]:not(:checked) + label:after {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  
+  .credit-commitments .q1 input[type="radio"]:checked + label:after {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+  .credit-commitments .q3 .radio-container {
+    float: none;
+    width: 37%;
+    margin: 0 0 10px 0;
+  }
+  .credit-commitments .q4 .radio-container {
+    float: none;
+    width: 40%;
+    margin: 0 0 10px 0;
+  }
+  
+  .credit-commitments .heading1 {
+    font-size: 22px;
+    color: #62635d;
+    font-weight: 600;
+    margin: 17px 0 0px 0;
+    font-style: italic;
+  }
+  .credit-commitments .heading2 {
+    margin: 30px 0 10px 0;
+  }
+  .credit-commitments .h61 {
+    font-size: 16px;
+    color: #62635d;
+    margin: 25px 0 15px 0;
+    padding: 0 0 0 4px;
+  }
+  .credit-commitments .colomn_8 .select-option1 {
+    width: 80%;
+    margin-bottom: 3px;
+    /* height: 50px; */
+  }
+  .credit-commitments .ant-select-selection--single {
+    background: #cccccc;
+    border:2px solid gray;
+    border-radius: 20px;
+    height: 37px;
+  }
+  .credit-commitments .ant-select-selection--single:active {
+    border:2px solid gray;
+    box-shadow: none;
+  }
+  .credit-commitments .ant-select-selection--single:focus {
+    border:2px solid gray   ;
+    box-shadow: none;
+  }
+  .credit-commitments .ant-select-selection__rendered {
+    line-height: 37px;
+    color: white;
+    font-weight: 600;
+    padding: 0 0 0 12px;
+  }
+  .credit-commitments .ant-select-arrow {
+    color: white;
+    padding: 0 10px 0 0;
+  }
+  
+  .credit-commitments .ant-select-arrow path {
+    stroke-width: 161px;
+    stroke: white;
+  }
+  .credit-commitments .btn-div button {
+    margin: 0 20px 0 0;
+    padding: 10px 35px;
+    border: none;
+    border-radius: 3px;
+    font-weight: 600;
+    color: white;
+  }
+  .credit-commitments .btn-div {
+    margin: 20px 0 0 0;
+  }
+  .credit-commitments .btn-div .btn1 {
+    background: gray;
+  }
+  .credit-commitments .btn-div .btn2 {
+    background: #fb9500;
+  }
+  .credit-commitments .btn-div .btn2 {
+    height: 40px;
+  }
+  .credit-commitments .input {
+    margin: 0px 0 5px 0;
+  }
+  .credit-commitments .input input {
+    width: 50%;
+    height: 40px;
+    background: #cccccc;
+    border-radius: 20px;
+    border: 2px solid gray;
+    outline: none;
+    padding: 0 20px 0 40px;
+    font-weight: 600;
+    color: white;
+  }
+  
+  .credit-commitments .input input::placeholder {
+    color: white;
+  }
+  
+  
+  
+
+  .my_costuma{
+      display: flex;
+      flex-direction: row;
+      justify-content: start;
+  }
+
+  .my_costuma > div{
+      width: 24% !important;
+  } 
+
+  .edit_C{
+      left: 15px;
+      position: relative;
+    top: -11px;
+  }
+  .inputWithEdit{
+      display: flex;
+      flex-direction: row; 
+      align-items: center;
+      justify-content: flex-start;
+  }
+  .inputWithEdit .input input {
+      width: 100% !important;
+  }
+   .textarea-input {
+    width: 47%;
+  }
+   .textarea-input textarea {
+    width: 100%;
+    resize: none;
+    height: 100px;
+    outline: none;
+    border-radius: 5px;
+    color: white;
+    padding: 10px 10px;
+    border: none;
+    background: #cccccc;
+  }
+   .textarea-input textarea::placeholder {
+    color: white;
+  }
+  .textarea-input textarea:focus {
+    border: none;
+  }

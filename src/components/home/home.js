@@ -12,18 +12,21 @@ import { Route, Switch } from "react-router-dom";
 import Feed from "./feed/feed";
 import FinancialHealth from "../financialHealth/getStatetedText/getStartedText";
 import GetStarted from "../financialHealth/getStarted/getStarted";
-import DetailMover from "../details/detailMover/detailMover"
-import AfterIntial from "../financialHealth/afterintial/"
+import DetailMover from "../details/detailMover/detailMover";
+import AfterIntial from "../financialHealth/afterintial/";
 import StepOne from "../details/step1/step1";
-import StepTwo from '../details/step2/step2';
+import StepTwo from "../details/step2/step2";
 import StepThree from "../details/step3/step3";
 import StepFour from "../details/step4/step4";
-import SwitcherThree from '../details/switcher3/switcher3'; 
+import SwitcherThree from "../details/switcher3/switcher3";
+import MonthlyOutgoing from "../details/monthlyOutgoings/MonthlyOutgoings";
+import CreditCommittments from "../details/creditCommittments/CreditCommittments";
+import BankDetails from "../details/bankDetails/BankDetails";
 // import AdditionalProperty from "../details/additionalProperty/AdditionalProperty";
 import AdditionalPropertyIndex from "../details/additionalProperty/additionalPropertyIndex";
 import FinalPage from "../details/FinalPage/FinalPage";
 import PersonalDetails1 from "../personalDetails/personalDetails1/personalDetails1";
-import ExpertChat from '../expertChat/expertChat';
+import ExpertChat from "../expertChat/expertChat";
 const { Panel } = Collapse;
 
 function Home(props) {
@@ -47,22 +50,85 @@ function Home(props) {
                     <SearchBar />
                   </Col>
                   <Switch>
-                    <Route exact path="/home/settings" component={UserSettings} />
-                    <Route exact path="/home/relatedInformation" component={AfterIntial} />
-                    <Route exact path="/home/financial-health" component={FinancialHealth} />
-                    <Route exact path="/home/financial-health/get-started" component={GetStarted} />
-                    <Route exact path="/home/details/s5" component={DetailMover} />
-                    <Route exact path="/home/details/s1" component={StepOne} />
-
+                    <Route
+                      exact
+                      path="/home/settings"
+                      component={UserSettings}
+                    />
+                    <Route
+                      exact
+                      path="/home/relatedInformation"
+                      component={AfterIntial}
+                    />
+                    <Route
+                      exact
+                      path="/home/financial-health"
+                      component={FinancialHealth}
+                    />
+                    <Route
+                      exact
+                      path="/home/financial-health/get-started"
+                      component={GetStarted}
+                    />
+                    <Route
+                      exact
+                      path="/home/details/s5"
+                      component={DetailMover}
+                    />
+                    {/* <Route exact path="/home/details/s1" component={StepOne} /> */}
+                    <Route
+                      exact
+                      path="/home/details/s1"
+                      component={CreditCommittments}
+                    />
                     <Route exact path="/home/details/s2" component={StepTwo} />
-                    <Route exact path="/home/details/s3" component={StepThree} />
+                    <Route
+                      exact
+                      path="/home/details/s3"
+                      component={StepThree}
+                    />
                     <Route exact path="/home/details/s4" component={StepFour} />
-                    <Route exact path="/home/details/switcher3" component={SwitcherThree} />
-                    <Route exact path="/home/details/additional_p/:number" component={AdditionalPropertyIndex} />
-                    <Route exact path="/home/details/final_page" component={FinalPage} />
-                    <Route exact path="/home/details/personal_d1" component={PersonalDetails1} />
-                    <Route exact  path="/home/expertChat" component={ExpertChat} />
-                    <Route  path="/home" component={Feed} />
+                    <Route
+                      exact
+                      path="/home/details/s5"
+                      component={MonthlyOutgoing}
+                    />
+                    <Route
+                      exact
+                      path="/home/details/credit-commitments"
+                      component={CreditCommittments}
+                    />
+                    <Route
+                      exact
+                      path="/home/details/bank-details"
+                      component={BankDetails}
+                    />
+                    <Route
+                      exact
+                      path="/home/details/switcher3"
+                      component={SwitcherThree}
+                    />
+                    <Route
+                      exact
+                      path="/home/details/additional_p/:number"
+                      component={AdditionalPropertyIndex}
+                    />
+                    <Route
+                      exact
+                      path="/home/details/final_page"
+                      component={FinalPage}
+                    />
+                    <Route
+                      exact
+                      path="/home/details/personal_d1"
+                      component={PersonalDetails1}
+                    />
+                    <Route
+                      exact
+                      path="/home/expertChat"
+                      component={ExpertChat}
+                    />
+                    <Route path="/home" component={Feed} />
                   </Switch>
                 </Row>
               </div>

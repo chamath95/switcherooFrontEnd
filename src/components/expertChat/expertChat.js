@@ -30,6 +30,23 @@ const EXPERT_WAIT_TIME = 10;
 const PAUSE_WAITING = 2000;
 const TYPING_WAITING = 1000;
 const TIME_INCREMENT2 = 4000;
+const Bubble = styled.div`
+  background: rgb(251, 149, 0);
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
+  margin: 0px 5px;
+  cursor: pointer;
+  min-width: 45%;
+  align-items: center;
+  display: flex;
+  img {
+    width: 35px;
+    margin-left: 0.5rem;
+  }
+`;
 
 class ExpertChat extends Component {
   constructor(props) {
@@ -54,7 +71,11 @@ class ExpertChat extends Component {
   scrollToBottom = () => {
     this.messagesEnd && this.messagesEnd.scrollIntoView({ behavior: "smooth" });
   };
-  componentDidUpdate() {}
+  componentDidMount() {
+    alert("Hey")
+    const height = document.getElementById("search-bar").clientHeight;
+    this.setState({ height, me: 'som' });
+  }
   // const [chats, setChat] = useState([]);
   setLoading = async isLoading => {
     // if (isLoading) {
@@ -148,15 +169,15 @@ class ExpertChat extends Component {
     const setResponse = this.setResponse;
     return (
       <>
-        <Col lg={18}>
-          <div className="chat-section">
+        <Col style={{ height: "calc(100vh - 100px)" }} lg={18}>
+          <div className="chat-section" style={{ height: "100%" }}>
             <div
               // className="chat-parent"
               style={{
                 display: "flex",
                 flex: 1,
-                height: "auto",
-                maxHeight: "90vh",
+                height: "100%",
+                // maxHeight: "90vh",
                 minHeight: "90vh",
                 flexDirection: "column"
               }}
@@ -247,46 +268,149 @@ class ExpertChat extends Component {
                   {/* <Icon type="arrow-right" /> */}
                   <img className="img" src={rightIcon} />
                 </span>
-                {this.state.possibleResponse.map(
-                  ({ _id, response, dropdown }) => {
-                    if (dropdown) {
-                      const menu = (
-                        <Menu
-                          style={{
-                            background: "#fb9500",
-                            // border: "none",
-                            color: "white"
-                          }}
-                          onClick={async ({
-                            item: {
-                              props: { children }
-                            }
-                          }) => {
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    minWidth: "50%"
+                  }}
+                >
+                  {this.state.possibleResponse.map(
+                    ({ _id, response, dropdown }) => {
+                      if (dropdown) {
+                        const menu = (
+                          <Menu
+                            style={{
+                              background: "#fb9500",
+                              // border: "none",
+                              color: "white",
+                              fontSize: "20px"
+                            }}
+                            onClick={async ({
+                              item: {
+                                props: { children }
+                              }
+                            }) => {
+                              const { setChat, setLoading, setResponse } = this;
+                              const possibleResponse = this.state
+                                .possibleResponse;
+                              let newChat = [
+                                ...this.state.chats,
+                                {
+                                  message: children,
+                                  time: new Date().toJSON(),
+                                  status: "response",
+                                  // ...chat,
+                                  possibleResponse
+                                }
+                              ];
+
+                              this.setChat(newChat);
+                              // setTimeout(async () => {
+                              // this.setLoading(true);
+                              // }, TYPING_WAITING);
+
+                              await this.scrollToBottom();
+                              this.clearResponse();
+                              const token = localStorage.getItem("tokenas");
+                              this.scrollToBottom();
+                              setTimeout(async () => {
+                                api.post(
+                                  "/api/expertChat/getResponse",
+                                  { _id, newChat, possibleResponse },
+                                  token,
+                                  dispatch,
+                                  async (err, res) => {
+                                    if (!err) {
+                                      const chat = res;
+                                      let waitTime = 0;
+                                      this.scrollToBottom();
+                                      await this.getResponse(chat);
+                                    }
+                                    // console.log(res, err);
+                                  }
+                                );
+                              }, EXPERT_WAIT_TIME);
+                            }}
+                          >
+                            {Array.from(new Array(dropdown)).map((n, i) => (
+                              <Menu.Item key={Math.random() * 19302930}>
+                                {i + 1}
+                              </Menu.Item>
+                            ))}
+                          </Menu>
+                        );
+                        return (
+                          <div
+                            key={`${_id}${Math.random() * 100000}`}
+                            style={{
+                              background: "#FB9500",
+                              padding: "5px 10px",
+                              borderRadius: "5px",
+                              fontSize: "18px",
+                              color: "white",
+                              fontWeight: "bold",
+                              margin: "0px 5px",
+                              cursor: "pointer",
+                              minWidth: "100px"
+                            }}
+                          >
+                            <Dropdown placement={"topCenter"} overlay={menu}>
+                              <Button
+                                style={{
+                                  background: "#fb9500",
+                                  border: "none",
+                                  color: "white",
+                                  fontSize: "20px"
+                                }}
+                              >
+                                Choose... <Icon type="up" />
+                              </Button>
+                            </Dropdown>
+                          </div>
+                        );
+                      }
+                      return (
+                        <Bubble
+                          key={`${_id}${Math.random() * 100000}`}
+                          // style={{
+                          //   background: "#FB9500",
+                          //   padding: "5px 10px",
+                          //   borderRadius: "5px",
+                          //   fontSize: "18px",
+                          //   color: "white",
+                          //   fontWeight: "bold",
+                          //   margin: "0px 5px",
+                          //   cursor: "pointer",
+                          //   minWidth: "45%",
+                          //   alignItems: "center",
+                          //   display: "flex"
+                          //   // maxHeight: "40px"
+                          // }}
+                          onClick={async () => {
                             const { setChat, setLoading, setResponse } = this;
                             const possibleResponse = this.state
                               .possibleResponse;
                             let newChat = [
                               ...this.state.chats,
                               {
-                                message: children,
+                                message: response,
                                 time: new Date().toJSON(),
                                 status: "response",
                                 // ...chat,
-                                possibleResponse
+                                possibleResponse: this.state.possibleResponse,
+                                dropdown
                               }
                             ];
 
                             this.setChat(newChat);
-                            // setTimeout(async () => {
-                            // this.setLoading(true);
-                            // }, TYPING_WAITING);
-
                             await this.scrollToBottom();
                             this.clearResponse();
+                            // this.setLoading(true);
                             const token = localStorage.getItem("tokenas");
                             this.scrollToBottom();
                             setTimeout(async () => {
-                              api.post(
+                              await api.post(
                                 "/api/expertChat/getResponse",
                                 { _id, newChat, possibleResponse },
                                 token,
@@ -304,101 +428,16 @@ class ExpertChat extends Component {
                             }, EXPERT_WAIT_TIME);
                           }}
                         >
-                          {Array.from(new Array(dropdown)).map((n, i) => (
-                            <Menu.Item key={Math.random() * 19302930}>
-                              {i + 1}
-                            </Menu.Item>
-                          ))}
-                        </Menu>
-                      );
-                      return (
-                        <div
-                          key={`${_id}${Math.random() * 100000}`}
-                          style={{
-                            background: "#FB9500",
-                            padding: "5px 10px",
-                            borderRadius: "5px",
-                            fontSize: "18px",
-                            color: "white",
-                            fontWeight: "bold",
-                            margin: "0px 5px",
-                            cursor: "pointer",
-                            minWidth: "100px"
-                          }}
-                        >
-                          <Dropdown placement={"topCenter"} overlay={menu}>
-                            <Button
-                              style={{
-                                background: "#fb9500",
-                                border: "none",
-                                color: "white"
-                              }}
-                            >
-                              Choose... <Icon type="up" />
-                            </Button>
-                          </Dropdown>
-                        </div>
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: purge(response)
+                            }}
+                          ></span>
+                        </Bubble>
                       );
                     }
-                    return (
-                      <div
-                        key={`${_id}${Math.random() * 100000}`}
-                        style={{
-                          background: "#FB9500",
-                          padding: "5px 10px",
-                          borderRadius: "5px",
-                          fontSize: "18px",
-                          color: "white",
-                          fontWeight: "bold",
-                          margin: "0px 5px",
-                          cursor: "pointer",
-                          minWidth: "100px"
-                          // maxHeight: "40px"
-                        }}
-                        onClick={async () => {
-                          const { setChat, setLoading, setResponse } = this;
-                          const possibleResponse = this.state.possibleResponse;
-                          let newChat = [
-                            ...this.state.chats,
-                            {
-                              message: response,
-                              time: new Date().toJSON(),
-                              status: "response",
-                              // ...chat,
-                              possibleResponse: this.state.possibleResponse,
-                              dropdown
-                            }
-                          ];
-
-                          this.setChat(newChat);
-                          await this.scrollToBottom();
-                          this.clearResponse();
-                          // this.setLoading(true);
-                          const token = localStorage.getItem("tokenas");
-                          this.scrollToBottom();
-                          setTimeout(async () => {
-                            await api.post(
-                              "/api/expertChat/getResponse",
-                              { _id, newChat, possibleResponse },
-                              token,
-                              dispatch,
-                              async (err, res) => {
-                                if (!err) {
-                                  const chat = res;
-                                  let waitTime = 0;
-                                  this.scrollToBottom();
-                                  await this.getResponse(chat);
-                                }
-                                // console.log(res, err);
-                              }
-                            );
-                          }, EXPERT_WAIT_TIME);
-                        }}
-                        dangerouslySetInnerHTML={{ __html: purge(response) }}
-                      ></div>
-                    );
-                  }
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>

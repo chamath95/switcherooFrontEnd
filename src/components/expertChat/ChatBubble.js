@@ -92,6 +92,17 @@ function purge(text) {
   if (!match) return text;
   const main = match[match.length - 1].replace("emoji=", "");
   const raw = match[0];
+
+  if (main == "right_turn.png") {
+    return text.replace(
+      raw,
+      `<div style="
+      display: flex;
+      flex-direction: row-reverse;
+  "><img className="img" src="images/chat/${main}" /></div>`
+    );
+  }
+  // console.log({ raw });
   const som = text.replace(
     raw,
     `<img className="img" src="images/chat/${main}" />`

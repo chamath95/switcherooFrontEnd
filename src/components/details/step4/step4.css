@@ -12,6 +12,7 @@
   box-sizing: border-box;
   font-size: 12pt;
   overflow-x: hidden;
+
 }
 
 @media print {
@@ -377,13 +378,14 @@ padding-left: 110px;
 
 
 #watermark {
-  height: 471px;
-  width: 100%;
+  height: 571px;
+  width: 110%;
   position: relative;
   overflow: hidden;
   z-index: 1000;
   color: black;
-  margin-top: -150px;
+  margin-top: -190px;
+  margin-left: -90px;
   padding-top: 15px
 }
 
@@ -394,10 +396,14 @@ padding-left: 110px;
   color: rgba(220, 220, 220, 0.2);
   pointer-events: none;
   -webkit-transform: rotate(-22deg);
-  font-size: 150px;
+  font-size: 220px;
   margin-top: 100px;
   font-weight: bolder;
   -moz-transform: rotate(-22deg);
   margin-left: 80px;
+}
+
+.custom-line-height{
+  line-height: 1.8;
 }
 

@@ -6,6 +6,7 @@ import jsPDF from 'jspdf';
 import html2pdf from 'html2pdf.js'
 import html2canvas from 'html2canvas';
 const $ = window.$;
+// import AppApi from "../../../../../../redux/api/applicationApi";
 
 function StepFour(props) {
 
@@ -407,6 +408,10 @@ function StepFour(props) {
   const handleSubmit = e => {
     e.preventDefault();
     console.log(formData)
+    // this.AppApi.applicationDataPost(formData, res=>{
+    //   console.log(res)//
+    // })
+
   }
 
   const exportPdf = () => {
@@ -445,7 +450,7 @@ html2pdf(element, opt);
 
             <div id="watermark">
 
-  <p class="wm-text">MORTGAGE</p>
+  <p class="wm-text">Mortgage</p>
 </div>
 
           </div>
@@ -499,9 +504,10 @@ html2pdf(element, opt);
                 <input type="text" className="box-input" />
               </div>
             </div>
-            <div className="row">
-              <p>Disclosure of intermediary Status (where applicable). (e.g. only acts on behalf of one lender or one insurance company)</p>
-              <p>If this application has been introduced to you, by a thord party (including an appointed introducer) please provide the introducers name and address.</p>
+            <br/>
+            <div className="row custom-line-height">
+              <p className="custom-line-height">Disclosure of intermediary Status (where applicable). (e.g. only acts on behalf of one lender or one insurance company)</p>
+              <p className="custom-line-height">If this application has been introduced to you, by a thord party (including an appointed introducer) please provide the introducers name and address.</p>
             </div>
           </div>
           <div className="header">
@@ -510,7 +516,7 @@ html2pdf(element, opt);
           <br />
           <div className="full-content">
             <div className="row">
-              <p>This application form is divided into two parts. The first part captures information about you, the applicant. The second part gives important information about mortgages offered by a given mortgage lender, including statutory warnings. In part two your signature is required in relation to your application for a mortgage loan and your consent is sought in relation to various matters.</p>
+              <p className="custom-line-height">This application form is divided into two parts. The first part captures information about you, the applicant. The second part gives important information about mortgages offered by a given mortgage lender, including statutory warnings. In part two your signature is required in relation to your application for a mortgage loan and your consent is sought in relation to various matters.</p>
               <h6 className="custom-sub-header">Please ensure that all applicants sign part one and two of the application.</h6>
             </div>
           </div>
